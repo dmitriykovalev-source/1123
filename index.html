@@ -15,6 +15,9 @@
     --tag-bg-2: #ffe9ee;
     --tag-text-2: #d63c63;
     --shadow: 0 1px 2px rgba(20,20,30,0.04), 0 8px 24px rgba(20,20,30,0.06);
+    --done-bg: #f1fbf4;
+    --done-border: #b8e6c4;
+    --done-accent: #1f9d55;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -30,6 +33,9 @@
       --tag-bg-2: #3a2029;
       --tag-text-2: #ff9fb4;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4);
+      --done-bg: #12241a;
+      --done-border: #245536;
+      --done-accent: #4ade80;
     }
   }
   * { box-sizing: border-box; }
@@ -67,6 +73,31 @@
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(6px);
   }
+  nav.filters .progress {
+    max-width: 520px;
+    margin: 0 auto 14px;
+  }
+  nav.filters .progress .label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  nav.filters .progress .label b { color: var(--text); font-weight: 600; }
+  .progress-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--done-accent));
+    transition: width .25s ease;
+  }
   nav.filters .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   nav.filters button {
     border: 1px solid var(--border);
@@ -82,6 +113,12 @@
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
+  }
+  nav.filters button.reset {
+    margin-left: 8px;
+    background: transparent;
+    color: var(--text-dim);
+    border-style: dashed;
   }
 
   section.group { padding: 56px 0 16px; }
@@ -110,9 +147,26 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .card.done {
+    background: var(--done-bg);
+    border-color: var(--done-border);
+  }
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .done-check {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    accent-color: var(--done-accent);
+    cursor: pointer;
   }
   .card .tag {
-    align-self: flex-start;
     font-size: 12px;
     font-weight: 600;
     padding: 4px 10px;
@@ -124,9 +178,18 @@
     background: var(--tag-bg-2);
     color: var(--tag-text-2);
   }
+  .card.done .tag {
+    background: var(--done-border);
+    color: var(--done-accent);
+  }
   .card h3 {
     margin: 0;
     font-size: 19px;
+  }
+  .card.done h3 {
+    color: var(--done-accent);
+    text-decoration: line-through;
+    text-decoration-color: var(--done-border);
   }
   .card .desc {
     color: var(--text-dim);
@@ -181,15 +244,20 @@
 <header class="hero">
   <div class="wrap">
     <h1>Figma: что <span class="accent">важно</span> знать и что <span class="accent">нового</span></h1>
-    <p>Подборка фич Figma для продуктового дизайнера — с объяснением, как это работает, и с реальным влиянием на рабочий процесс. Отдельно — база, отдельно — всё новое с 2024 года.</p>
+    <p>Подборка фич Figma для продуктового дизайнера — с объяснением, как это работает, и с реальным влиянием на рабочий процесс. Отмечайте пройденные фичи чекбоксом — прогресс сохраняется в браузере.</p>
   </div>
 </header>
 
 <nav class="filters">
+  <div class="progress">
+    <div class="label"><span>Прогресс изучения</span><span><b id="progress-count">0</b> / <span id="progress-total">16</span></span></div>
+    <div class="progress-bar"><div class="fill" id="progress-fill"></div></div>
+  </div>
   <div class="row">
     <button data-filter="all" class="active">Все фичи</button>
     <button data-filter="core">Важные</button>
     <button data-filter="new">Новое с 2024</button>
+    <button class="reset" id="reset-progress">Сбросить прогресс</button>
   </div>
 </nav>
 
@@ -201,7 +269,10 @@
     <div class="grid">
 
       <article class="card core">
-        <span class="tag">Layout</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-auto-layout" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Layout</span>
+        </div>
         <h3>Auto Layout</h3>
         <p class="desc">Контейнеры сами пересчитывают размеры, отступы и позиции дочерних элементов при изменении контента — как flexbox в CSS, но визуально, без кода.</p>
         <p class="impact"><b>Импакт</b>Макет не «ломается» при длинном имени, другом языке или новом элементе — не нужно вручную двигать слои после каждой правки контента.</p>
@@ -209,7 +280,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">Components</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-variants" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Components</span>
+        </div>
         <h3>Компоненты и варианты (Variants)</h3>
         <p class="desc">Один компонент с набором вариаций (размер, состояние, тема), которые переключаются как свойства, а не хранятся отдельными слоями.</p>
         <p class="impact"><b>Импакт</b>Правка в главном компоненте моментально расходится по всем инстансам в проекте — обновление кнопки во всём файле занимает секунды, а не часы.</p>
@@ -217,7 +291,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">Components</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-component-properties" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Components</span>
+        </div>
         <h3>Component Properties</h3>
         <p class="desc">Свойства компонента (instance swap, boolean, текст, вложенные инстансы), которые можно менять прямо в панели, не залезая в структуру слоёв.</p>
         <p class="impact"><b>Импакт</b>Библиотека не «взрывается» от количества вариантов — одна карточка обслуживает десятки конфигураций через простые переключатели.</p>
@@ -225,7 +302,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">Layout</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-constraints" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Layout</span>
+        </div>
         <h3>Constraints и адаптивный resize</h3>
         <p class="desc">Правила «прилипания» слоя к краям и центру рамки при её растягивании — база адаптивности там, где Auto Layout избыточен.</p>
         <p class="impact"><b>Импакт</b>Один макет проверяется на разных размерах экрана растягиванием фрейма, а не рисованием версии под каждый брейкпоинт.</p>
@@ -233,7 +313,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">Prototyping</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-prototyping" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Prototyping</span>
+        </div>
         <h3>Интерактивные прототипы (overlays, Smart Animate)</h3>
         <p class="desc">Связки экранов с переходами, модалками, оверлеями и плавной анимацией между состояниями без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Прототип, максимально близкий к реальному продукту, можно протестировать на пользователях и показать команде до старта разработки.</p>
@@ -241,7 +324,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">System</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-styles" aria-label="Отметить фичу как изученную" />
+          <span class="tag">System</span>
+        </div>
         <h3>Локальные стили (цвет, текст, эффекты)</h3>
         <p class="desc">Именованные наборы значений (цвет, типографика, тени), на которые ссылаются слои по всему файлу и библиотекам.</p>
         <p class="impact"><b>Импакт</b>Ребрендинг или смена акцентного цвета — это правка одного стиля, а не поиск всех использований вручную по слоям.</p>
@@ -249,7 +335,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">Vector</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-boolean" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Vector</span>
+        </div>
         <h3>Boolean Operations и векторное редактирование</h3>
         <p class="desc">Union, Subtract, Intersect, Exclude для сложных форм плюс полноценный vector network editor для точной работы с точками и кривыми.</p>
         <p class="impact"><b>Импакт</b>Иконки, пиктограммы и кастомные иллюстрации собираются прямо в Figma — не нужно переключаться в Illustrator для базовой векторной работы.</p>
@@ -257,7 +346,10 @@
       </article>
 
       <article class="card core">
-        <span class="tag">Workflow</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="core-version-history" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Workflow</span>
+        </div>
         <h3>История версий и ветки (Branching)</h3>
         <p class="desc">Полный снепшот файла на любой момент времени плюс возможность отвести отдельную «ветку» для рискованных экспериментов.</p>
         <p class="impact"><b>Импакт</b>Можно смело переделывать флоу или дизайн-систему, зная, что в любой момент есть откат к рабочей версии — без страха «всё сломать».</p>
@@ -273,7 +365,10 @@
     <div class="grid">
 
       <article class="card new">
-        <span class="tag">Dev Handoff</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-dev-mode" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Dev Handoff</span>
+        </div>
         <h3>Dev Mode</h3>
         <p class="desc">Отдельный режим для разработчиков: авто-генерация CSS/iOS/Android-сниппетов, инспектор токенов и переменных, аннотации и готовые к копированию значения.</p>
         <p class="impact"><b>Импакт</b>Дизайнер перестаёт быть «переводчиком» макета в спеку — разработчик сам читает точные значения и меньше расходится с макетом в вёрстке.</p>
@@ -281,7 +376,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">Tokens</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-variables" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Tokens</span>
+        </div>
         <h3>Variables и Modes (темизация)</h3>
         <p class="desc">Переменные для цвета, чисел, строк и boolean, собранные в коллекции с режимами (light/dark, density, brand), которые переключаются одним свойством.</p>
         <p class="impact"><b>Импакт</b>Один файл поддерживает light/dark и несколько брендов без дублирования экранов — дизайн-система становится настоящими токенами, а не картинками.</p>
@@ -289,7 +387,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">Prototyping</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-conditional-logic" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Prototyping</span>
+        </div>
         <h3>Условная логика и выражения в прототипах</h3>
         <p class="desc">If/else-логика, математические выражения и работа с переменными внутри прототипа — счётчики, тумблеры, простая валидация форм.</p>
         <p class="impact"><b>Импакт</b>Прототип с реальным поведением (не просто «клик — переход») можно тестировать на пользователях без единой строчки кода и без разработчика.</p>
@@ -297,7 +398,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">Layout</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-grid-layout" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Layout</span>
+        </div>
         <h3>Grid-раскладки в Auto Layout</h3>
         <p class="desc">Настоящая сетка (строки и колонки) внутри Auto Layout-контейнера — аналог CSS Grid, а не имитация через вложенные фреймы.</p>
         <p class="impact"><b>Импакт</b>Дашборды, галереи и карточные сетки собираются без десятков вложенных auto-layout фреймов «для симуляции grid».</p>
@@ -305,7 +409,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">Dev Handoff</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-code-connect" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Dev Handoff</span>
+        </div>
         <h3>Code Connect</h3>
         <p class="desc">Привязка реальных компонентов кодовой базы (React, SwiftUI и др.) к компонентам в Figma — Dev Mode показывает настоящий сниппет проекта, а не сгенерированный.</p>
         <p class="impact"><b>Импакт</b>Разработчик видит именно тот компонент, который уже есть в проекте, — меньше дублей кода и меньше расхождений между дизайн-системой и реальной библиотекой компонентов.</p>
@@ -313,7 +420,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">Publishing</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-sites" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Publishing</span>
+        </div>
         <h3>Figma Sites</h3>
         <p class="desc">Публикация сайта прямо из дизайн-файла — с реальным поведением (адаптивность, анимации, формы), без передачи макета в отдельный конструктор или разработку.</p>
         <p class="impact"><b>Импакт</b>Лендинги, промо-страницы и маркетинговые сайты дизайнер доводит от макета до продакшена самостоятельно, минуя цикл разработки.</p>
@@ -321,7 +431,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">AI</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-make" aria-label="Отметить фичу как изученную" />
+          <span class="tag">AI</span>
+        </div>
         <h3>Figma Make</h3>
         <p class="desc">Генерация рабочего прототипа с реальной логикой и данными по текстовому описанию или дизайну — переход от «картинки» к кликабельному мини-приложению.</p>
         <p class="impact"><b>Импакт</b>Гипотезу можно проверить на функциональном прототипе за минуты, а не ждать спринт разработки на PoC.</p>
@@ -329,7 +442,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">Content</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-buzz" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Content</span>
+        </div>
         <h3>Figma Buzz</h3>
         <p class="desc">Инструмент для быстрой сборки брендированного маркетингового контента по шаблонам, которые задаёт дизайнер, — для соцсетей, баннеров, промо-материалов.</p>
         <p class="impact"><b>Импакт</b>Маркетинг и другие команды сами собирают контент в рамках бренд-гайда, а дизайнер один раз настраивает шаблон вместо ручного производства каждого баннера.</p>
@@ -337,7 +453,10 @@
       </article>
 
       <article class="card new">
-        <span class="tag">AI / Dev</span>
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-mcp-server" aria-label="Отметить фичу как изученную" />
+          <span class="tag">AI / Dev</span>
+        </div>
         <h3>Dev Mode MCP Server</h3>
         <p class="desc">Сервер, через который AI-агенты (Claude Code, Cursor и другие) читают реальный design context — токены, структуру компонентов, разметку — прямо из открытого файла Figma.</p>
         <p class="impact"><b>Импакт</b>Код, сгенерированный AI, использует настоящие токены и структуру дизайна, а не угадывает их — дизайн-система становится источником правды для AI-кодогенерации.</p>
@@ -351,12 +470,12 @@
 
 <footer>
   <div class="wrap">
-    Собрано вручную, ссылки ведут на поиск YouTube — так они не протухают и всегда ведут на актуальные видео.
+    Собрано вручную, ссылки ведут на поиск YouTube — так они не протухают и всегда ведут на актуальные видео. Прогресс хранится локально в браузере (localStorage), только на этом устройстве.
   </div>
 </footer>
 
 <script>
-  var buttons = document.querySelectorAll('nav.filters button');
+  var buttons = document.querySelectorAll('nav.filters .row button[data-filter]');
   var groups = document.querySelectorAll('section.group');
   buttons.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -367,5 +486,61 @@
         g.style.display = (filter === 'all' || g.getAttribute('data-group') === filter) ? '' : 'none';
       });
     });
+  });
+
+  var STORAGE_KEY = 'figma-guide-progress';
+  var checkboxes = document.querySelectorAll('.done-check');
+  var countEl = document.getElementById('progress-count');
+  var totalEl = document.getElementById('progress-total');
+  var fillEl = document.getElementById('progress-fill');
+  totalEl.textContent = checkboxes.length;
+
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+  function updateProgress() {
+    var done = document.querySelectorAll('.done-check:checked').length;
+    countEl.textContent = done;
+    fillEl.style.width = (checkboxes.length ? (done / checkboxes.length * 100) : 0) + '%';
+  }
+  function applyCardState(checkbox) {
+    var card = checkbox.closest('.card');
+    card.classList.toggle('done', checkbox.checked);
+  }
+
+  var state = loadState();
+  checkboxes.forEach(function (cb) {
+    var id = cb.getAttribute('data-id');
+    cb.checked = !!state[id];
+    applyCardState(cb);
+  });
+  updateProgress();
+
+  checkboxes.forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      var id = cb.getAttribute('data-id');
+      var s = loadState();
+      s[id] = cb.checked;
+      saveState(s);
+      applyCardState(cb);
+      updateProgress();
+    });
+  });
+
+  document.getElementById('reset-progress').addEventListener('click', function () {
+    if (!confirm('Сбросить весь прогресс?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    checkboxes.forEach(function (cb) {
+      cb.checked = false;
+      applyCardState(cb);
+    });
+    updateProgress();
   });
 </script>
