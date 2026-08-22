@@ -86,28 +86,59 @@
     margin-bottom: 6px;
   }
   nav.filters .progress .label b { color: var(--text); font-weight: 600; }
-  .progress-count-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .progress-menu-wrap {
+    position: relative;
   }
-  .reset-progress {
+  .progress-trigger {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     border: none;
     background: none;
     color: var(--text-dim);
-    font-size: 12px;
+    font-size: 13px;
+    font-family: inherit;
     cursor: pointer;
     padding: 0;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    transition: color .15s ease, text-decoration-color .15s ease;
+  }
+  .progress-trigger:hover { color: var(--text); }
+  .progress-trigger svg {
+    transition: transform .15s ease;
+  }
+  .progress-trigger.open svg { transform: rotate(180deg); }
+  .progress-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 4px;
+    display: none;
+    z-index: 20;
+    min-width: 140px;
+  }
+  .progress-dropdown.open { display: block; }
+  .reset-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    border: none;
+    background: none;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+    text-align: left;
+    transition: background .12s ease, color .12s ease;
   }
   .reset-progress:hover {
+    background: var(--tag-bg-2);
     color: var(--accent-2);
-    text-decoration-color: var(--accent-2);
   }
   .progress-bar {
     height: 8px;
@@ -269,11 +300,16 @@
 <nav class="filters">
   <div class="progress">
     <div class="label">
-      <span>Прогресс изучения</span>
-      <span class="progress-count-wrap">
-        <span><b id="progress-count">0</b> / <span id="progress-total">16</span></span>
-        <button class="reset-progress" id="reset-progress">↺ Сбросить</button>
+      <span class="progress-menu-wrap">
+        <button class="progress-trigger" id="progress-trigger">
+          Прогресс изучения
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="progress-dropdown" id="progress-dropdown">
+          <button class="reset-progress" id="reset-progress">↺ Сбросить прогресс</button>
+        </div>
       </span>
+      <span><b id="progress-count">0</b> / <span id="progress-total">16</span></span>
     </div>
     <div class="progress-bar"><div class="fill" id="progress-fill"></div></div>
   </div>
@@ -486,6 +522,72 @@
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+MCP+server+tutorial">▶ Смотреть на YouTube</a>
       </article>
 
+      <article class="card new">
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-code-layers" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Config 2026</span>
+        </div>
+        <h3>Code Layers</h3>
+        <p class="desc">Новый тип слоя, в который можно подключить настоящий репозиторий (клонировать GitHub или загрузить локальный код) и переключаться между кодом и дизайном как между двумя представлениями одного и того же экрана.</p>
+        <p class="impact"><b>Импакт</b>Хэндофф перестаёт быть передачей «картинки» разработчику — дизайнер работает с реальными состояниями и структурой компонентов внутри самого файла, а не с их имитацией.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Code+Layers+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-figma-motion" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Config 2026</span>
+        </div>
+        <h3>Figma Motion</h3>
+        <p class="desc">Полноценный таймлайн анимации внутри файла — кейфреймы, кривые изинга, spring-анимации; агент может сгенерировать первый черновик анимации по текстовому запросу.</p>
+        <p class="impact"><b>Импакт</b>Моушен-дизайн переезжает из отдельных инструментов прямо в Figma и экспортируется готовым к продакшену кодом — дизайнер настраивает не механику, а смысл движения.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Motion+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-shader-effects" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Config 2026</span>
+        </div>
+        <h3>AI-шейдеры и эффекты</h3>
+        <p class="desc">Кастомные визуальные эффекты и заливки на базе WebGPU, которые генерируются промптом агенту, а затем переиспользуются как обычный стиль в других файлах.</p>
+        <p class="impact"><b>Импакт</b>Сложные визуальные эффекты для лендингов и промо больше не требуют навыков шейдер-программирования — но решение, где эффект уместен и не превращается в визуальный шум, всё равно на дизайнере.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+shader+effects+Config+2026">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-weave" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Config 2026</span>
+        </div>
+        <h3>Weave на канвасе</h3>
+        <p class="desc">Замена фона, композитинг логотипов, смена соотношения сторон и генерация изображений — раньше отдельные инструменты, теперь встроены прямо в канвас с готовой AI-логикой промптинга.</p>
+        <p class="impact"><b>Импакт</b>Рутинная работа с изображениями (вырезать фон, подогнать формат под баннер) занимает секунды прямо в файле — время освобождается для оценки результата, а не производства.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Weave+canvas+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-generative-plugins" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Config 2026</span>
+        </div>
+        <h3>Генеративные плагины</h3>
+        <p class="desc">Дизайнер описывает словами рутинную операцию (пересортировать слои, привести отступы к сетке, найти и заменить цвет) — агент собирает из этого переиспользуемый плагин без единой строчки кода.</p>
+        <p class="impact"><b>Импакт</b>Командные конвенции соблюдаются автоматически — «стандарт следит сам за собой», а дизайнер тратит внимание на исключения, где действительно нужна оценка человека.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+generative+plugins+Config+2026">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <div class="card-top">
+          <input type="checkbox" class="done-check" data-id="new-figma-agent" aria-label="Отметить фичу как изученную" />
+          <span class="tag">Config 2026</span>
+        </div>
+        <h3>Расширенный Figma Agent</h3>
+        <p class="desc">Агент получил кастомные переиспользуемые «навыки» из рабочих процессов команды, подключение внешних сервисов через MCP (Notion, GitHub, Excel), веб-поиск и живые данные, а также вышел за пределы дизайн-файлов — в FigJam и Figma Slides.</p>
+        <p class="impact"><b>Импакт</b>Решения команды и её процессы превращаются в исполняемый навык, а не остаются в чьей-то голове или личной переписке — агент одинаково полезен на этапе брейншторма, дизайна и презентации результата.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Agent+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
     </div>
   </section>
 
@@ -557,6 +659,20 @@
     });
   });
 
+  var progressTrigger = document.getElementById('progress-trigger');
+  var progressDropdown = document.getElementById('progress-dropdown');
+  progressTrigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    progressTrigger.classList.toggle('open');
+    progressDropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!progressDropdown.contains(e.target) && e.target !== progressTrigger) {
+      progressTrigger.classList.remove('open');
+      progressDropdown.classList.remove('open');
+    }
+  });
+
   document.getElementById('reset-progress').addEventListener('click', function () {
     if (!confirm('Сбросить весь прогресс?')) return;
     localStorage.removeItem(STORAGE_KEY);
@@ -565,5 +681,7 @@
       applyCardState(cb);
     });
     updateProgress();
+    progressTrigger.classList.remove('open');
+    progressDropdown.classList.remove('open');
   });
 </script>
