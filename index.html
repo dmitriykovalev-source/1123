@@ -1,0 +1,371 @@
+<title>Figma для дизайнера</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Важные и новые (с 2024 года) фичи Figma: что они делают и как влияют на работу дизайнера" />
+<style>
+  :root {
+    --bg: #f7f7f8;
+    --bg-card: #ffffff;
+    --text: #16161a;
+    --text-dim: #5c5c66;
+    --border: #e4e4e8;
+    --accent: #7b5cff;
+    --accent-2: #ff5c7b;
+    --tag-bg: #f0edff;
+    --tag-text: #5b3cf0;
+    --tag-bg-2: #ffe9ee;
+    --tag-text-2: #d63c63;
+    --shadow: 0 1px 2px rgba(20,20,30,0.04), 0 8px 24px rgba(20,20,30,0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f0f13;
+      --bg-card: #17171d;
+      --text: #f0f0f4;
+      --text-dim: #a3a3ad;
+      --border: #2a2a33;
+      --accent: #9b8cff;
+      --accent-2: #ff8fa3;
+      --tag-bg: #241f3d;
+      --tag-text: #b3a1ff;
+      --tag-bg-2: #3a2029;
+      --tag-text-2: #ff9fb4;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  header.hero {
+    padding: 72px 0 40px;
+    text-align: center;
+  }
+  header.hero h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    margin: 0 0 14px;
+    letter-spacing: -0.02em;
+  }
+  header.hero p {
+    color: var(--text-dim);
+    font-size: 18px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .accent { color: var(--accent); }
+
+  nav.filters {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+  }
+  nav.filters .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  nav.filters button {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  nav.filters button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  section.group { padding: 56px 0 16px; }
+  section.group h2 {
+    font-size: 26px;
+    margin: 0 0 6px;
+  }
+  section.group .subtitle {
+    color: var(--text-dim);
+    margin: 0 0 32px;
+    font-size: 15px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .card .tag {
+    align-self: flex-start;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+  }
+  .card.new .tag {
+    background: var(--tag-bg-2);
+    color: var(--tag-text-2);
+  }
+  .card h3 {
+    margin: 0;
+    font-size: 19px;
+  }
+  .card .desc {
+    color: var(--text-dim);
+    font-size: 14.5px;
+    margin: 0;
+  }
+  .card .impact {
+    font-size: 14px;
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .card .impact b {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .card a.yt {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: all .15s ease;
+  }
+  .card a.yt:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .card a.yt svg { flex-shrink: 0; }
+
+  footer {
+    margin-top: 64px;
+    padding: 40px 0 60px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13.5px;
+    text-align: center;
+  }
+  footer a { color: var(--text-dim); }
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Figma: что <span class="accent">важно</span> знать и что <span class="accent">нового</span></h1>
+    <p>Подборка фич Figma для продуктового дизайнера — с объяснением, как это работает, и с реальным влиянием на рабочий процесс. Отдельно — база, отдельно — всё новое с 2024 года.</p>
+  </div>
+</header>
+
+<nav class="filters">
+  <div class="row">
+    <button data-filter="all" class="active">Все фичи</button>
+    <button data-filter="core">Важные</button>
+    <button data-filter="new">Новое с 2024</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section class="group" data-group="core">
+    <h2>Важные фичи</h2>
+    <p class="subtitle">База, без которой продуктовый дизайн в Figma превращается в ручной труд.</p>
+    <div class="grid">
+
+      <article class="card core">
+        <span class="tag">Layout</span>
+        <h3>Auto Layout</h3>
+        <p class="desc">Контейнеры сами пересчитывают размеры, отступы и позиции дочерних элементов при изменении контента — как flexbox в CSS, но визуально, без кода.</p>
+        <p class="impact"><b>Импакт</b>Макет не «ломается» при длинном имени, другом языке или новом элементе — не нужно вручную двигать слои после каждой правки контента.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Auto+Layout+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">Components</span>
+        <h3>Компоненты и варианты (Variants)</h3>
+        <p class="desc">Один компонент с набором вариаций (размер, состояние, тема), которые переключаются как свойства, а не хранятся отдельными слоями.</p>
+        <p class="impact"><b>Импакт</b>Правка в главном компоненте моментально расходится по всем инстансам в проекте — обновление кнопки во всём файле занимает секунды, а не часы.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+components+and+variants+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">Components</span>
+        <h3>Component Properties</h3>
+        <p class="desc">Свойства компонента (instance swap, boolean, текст, вложенные инстансы), которые можно менять прямо в панели, не залезая в структуру слоёв.</p>
+        <p class="impact"><b>Импакт</b>Библиотека не «взрывается» от количества вариантов — одна карточка обслуживает десятки конфигураций через простые переключатели.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+component+properties+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">Layout</span>
+        <h3>Constraints и адаптивный resize</h3>
+        <p class="desc">Правила «прилипания» слоя к краям и центру рамки при её растягивании — база адаптивности там, где Auto Layout избыточен.</p>
+        <p class="impact"><b>Импакт</b>Один макет проверяется на разных размерах экрана растягиванием фрейма, а не рисованием версии под каждый брейкпоинт.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+constraints+responsive+resize+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">Prototyping</span>
+        <h3>Интерактивные прототипы (overlays, Smart Animate)</h3>
+        <p class="desc">Связки экранов с переходами, модалками, оверлеями и плавной анимацией между состояниями без единой строчки кода.</p>
+        <p class="impact"><b>Импакт</b>Прототип, максимально близкий к реальному продукту, можно протестировать на пользователях и показать команде до старта разработки.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+prototyping+smart+animate+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">System</span>
+        <h3>Локальные стили (цвет, текст, эффекты)</h3>
+        <p class="desc">Именованные наборы значений (цвет, типографика, тени), на которые ссылаются слои по всему файлу и библиотекам.</p>
+        <p class="impact"><b>Импакт</b>Ребрендинг или смена акцентного цвета — это правка одного стиля, а не поиск всех использований вручную по слоям.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+styles+color+text+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">Vector</span>
+        <h3>Boolean Operations и векторное редактирование</h3>
+        <p class="desc">Union, Subtract, Intersect, Exclude для сложных форм плюс полноценный vector network editor для точной работы с точками и кривыми.</p>
+        <p class="impact"><b>Импакт</b>Иконки, пиктограммы и кастомные иллюстрации собираются прямо в Figma — не нужно переключаться в Illustrator для базовой векторной работы.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+boolean+operations+vector+editing+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card core">
+        <span class="tag">Workflow</span>
+        <h3>История версий и ветки (Branching)</h3>
+        <p class="desc">Полный снепшот файла на любой момент времени плюс возможность отвести отдельную «ветку» для рискованных экспериментов.</p>
+        <p class="impact"><b>Импакт</b>Можно смело переделывать флоу или дизайн-систему, зная, что в любой момент есть откат к рабочей версии — без страха «всё сломать».</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+version+history+branching+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="group" data-group="new">
+    <h2>Новое с 2024 года</h2>
+    <p class="subtitle">Всё, что заметно поменяло рабочий процесс дизайнера за последние два года.</p>
+    <div class="grid">
+
+      <article class="card new">
+        <span class="tag">Dev Handoff</span>
+        <h3>Dev Mode</h3>
+        <p class="desc">Отдельный режим для разработчиков: авто-генерация CSS/iOS/Android-сниппетов, инспектор токенов и переменных, аннотации и готовые к копированию значения.</p>
+        <p class="impact"><b>Импакт</b>Дизайнер перестаёт быть «переводчиком» макета в спеку — разработчик сам читает точные значения и меньше расходится с макетом в вёрстке.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+tutorial+2024">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">Tokens</span>
+        <h3>Variables и Modes (темизация)</h3>
+        <p class="desc">Переменные для цвета, чисел, строк и boolean, собранные в коллекции с режимами (light/dark, density, brand), которые переключаются одним свойством.</p>
+        <p class="impact"><b>Импакт</b>Один файл поддерживает light/dark и несколько брендов без дублирования экранов — дизайн-система становится настоящими токенами, а не картинками.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+variables+modes+theming+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">Prototyping</span>
+        <h3>Условная логика и выражения в прототипах</h3>
+        <p class="desc">If/else-логика, математические выражения и работа с переменными внутри прототипа — счётчики, тумблеры, простая валидация форм.</p>
+        <p class="impact"><b>Импакт</b>Прототип с реальным поведением (не просто «клик — переход») можно тестировать на пользователях без единой строчки кода и без разработчика.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+conditional+logic+expressions+prototype+variables">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">Layout</span>
+        <h3>Grid-раскладки в Auto Layout</h3>
+        <p class="desc">Настоящая сетка (строки и колонки) внутри Auto Layout-контейнера — аналог CSS Grid, а не имитация через вложенные фреймы.</p>
+        <p class="impact"><b>Импакт</b>Дашборды, галереи и карточные сетки собираются без десятков вложенных auto-layout фреймов «для симуляции grid».</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+grid+auto+layout+2024+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">Dev Handoff</span>
+        <h3>Code Connect</h3>
+        <p class="desc">Привязка реальных компонентов кодовой базы (React, SwiftUI и др.) к компонентам в Figma — Dev Mode показывает настоящий сниппет проекта, а не сгенерированный.</p>
+        <p class="impact"><b>Импакт</b>Разработчик видит именно тот компонент, который уже есть в проекте, — меньше дублей кода и меньше расхождений между дизайн-системой и реальной библиотекой компонентов.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Code+Connect+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">Publishing</span>
+        <h3>Figma Sites</h3>
+        <p class="desc">Публикация сайта прямо из дизайн-файла — с реальным поведением (адаптивность, анимации, формы), без передачи макета в отдельный конструктор или разработку.</p>
+        <p class="impact"><b>Импакт</b>Лендинги, промо-страницы и маркетинговые сайты дизайнер доводит от макета до продакшена самостоятельно, минуя цикл разработки.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Sites+tutorial+2025">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">AI</span>
+        <h3>Figma Make</h3>
+        <p class="desc">Генерация рабочего прототипа с реальной логикой и данными по текстовому описанию или дизайну — переход от «картинки» к кликабельному мини-приложению.</p>
+        <p class="impact"><b>Импакт</b>Гипотезу можно проверить на функциональном прототипе за минуты, а не ждать спринт разработки на PoC.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Make+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">Content</span>
+        <h3>Figma Buzz</h3>
+        <p class="desc">Инструмент для быстрой сборки брендированного маркетингового контента по шаблонам, которые задаёт дизайнер, — для соцсетей, баннеров, промо-материалов.</p>
+        <p class="impact"><b>Импакт</b>Маркетинг и другие команды сами собирают контент в рамках бренд-гайда, а дизайнер один раз настраивает шаблон вместо ручного производства каждого баннера.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Buzz+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+      <article class="card new">
+        <span class="tag">AI / Dev</span>
+        <h3>Dev Mode MCP Server</h3>
+        <p class="desc">Сервер, через который AI-агенты (Claude Code, Cursor и другие) читают реальный design context — токены, структуру компонентов, разметку — прямо из открытого файла Figma.</p>
+        <p class="impact"><b>Импакт</b>Код, сгенерированный AI, использует настоящие токены и структуру дизайна, а не угадывает их — дизайн-система становится источником правды для AI-кодогенерации.</p>
+        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+MCP+server+tutorial">▶ Смотреть на YouTube</a>
+      </article>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    Собрано вручную, ссылки ведут на поиск YouTube — так они не протухают и всегда ведут на актуальные видео.
+  </div>
+</footer>
+
+<script>
+  var buttons = document.querySelectorAll('nav.filters button');
+  var groups = document.querySelectorAll('section.group');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var filter = btn.getAttribute('data-filter');
+      groups.forEach(function (g) {
+        g.style.display = (filter === 'all' || g.getAttribute('data-group') === filter) ? '' : 'none';
+      });
+    });
+  });
+</script>
