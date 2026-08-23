@@ -51,8 +51,18 @@
   }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
   header.hero {
+    position: relative;
     padding: 72px 0 40px;
     text-align: left;
+  }
+  header.hero .hero-row {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  header.hero .hero-text {
+    flex: 1;
+    min-width: 0;
   }
   header.hero h1 {
     font-size: clamp(28px, 5vw, 44px);
@@ -68,6 +78,28 @@
   header.hero .updated {
     font-size: 13px;
     margin: 14px 0 0;
+  }
+  .hero-illustration {
+    position: fixed;
+    top: var(--ill-top, 90px);
+    right: var(--ill-right, 24px);
+    width: var(--ill-width, 300px);
+    height: auto;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    background: #fff;
+    z-index: 5;
+    pointer-events: none;
+    transition: top .35s ease, right .35s ease, width .35s ease, border-radius .35s ease, box-shadow .35s ease;
+  }
+  .hero-illustration.docked {
+    top: 10px;
+    right: 14px;
+    width: 44px;
+    border-radius: 10px;
+  }
+  @media (max-width: 900px) {
+    .hero-illustration { display: none; }
   }
   .accent { color: var(--accent); }
 
@@ -689,11 +721,14 @@
 </style>
 
 <header class="hero">
-  <div class="wrap">
-    <h1>Figma: что <span class="accent">важно</span> знать и что <span class="accent">нового</span></h1>
-    <p>Подборка фич Figma для продуктового дизайнера — с объяснением, как это работает, и с реальным влиянием на рабочий процесс. Отмечайте пройденные фичи чекбоксом — прогресс сохраняется в браузере.</p>
-    <p class="updated">Обновлено: 23 августа 2026 года.</p>
+  <div class="wrap hero-row">
+    <div class="hero-text">
+      <h1>Figma: что <span class="accent">важно</span> знать и что <span class="accent">нового</span></h1>
+      <p>Подборка фич Figma для продуктового дизайнера — с объяснением, как это работает, и с реальным влиянием на рабочий процесс. Отмечайте пройденные фичи чекбоксом — прогресс сохраняется в браузере.</p>
+      <p class="updated">Обновлено: 23 августа 2026 года.</p>
+    </div>
   </div>
+  <img src="hero-illustration.png" alt="" id="hero-illustration" class="hero-illustration" />
 </header>
 
 <nav class="filters">
@@ -1322,6 +1357,30 @@
   }
   window.addEventListener('scroll', updateNavShadow, { passive: true });
   updateNavShadow();
+
+  var heroIllustration = document.getElementById('hero-illustration');
+  if (heroIllustration) {
+    var heroRow = document.querySelector('.hero-row');
+    var heroText = document.querySelector('.hero-text');
+    var ILL_RATIO = 540 / 760;
+    function positionHeroIllustration() {
+      var rowRect = heroRow.getBoundingClientRect();
+      var textRect = heroText.getBoundingClientRect();
+      var width = Math.min(300, rowRect.width * 0.26);
+      var height = width * ILL_RATIO;
+      var top = textRect.top + textRect.height / 2 - height / 2;
+      heroIllustration.style.setProperty('--ill-width', width + 'px');
+      heroIllustration.style.setProperty('--ill-right', (window.innerWidth - rowRect.right) + 'px');
+      heroIllustration.style.setProperty('--ill-top', Math.max(top, 24) + 'px');
+    }
+    function updateHeroIllustrationDock() {
+      heroIllustration.classList.toggle('docked', window.scrollY > 80);
+    }
+    window.addEventListener('resize', positionHeroIllustration);
+    window.addEventListener('scroll', updateHeroIllustrationDock, { passive: true });
+    positionHeroIllustration();
+    updateHeroIllustrationDock();
+  }
 
   var buttons = document.querySelectorAll('nav.filters .row button[data-filter]');
   var groups = document.querySelectorAll('section.group');
