@@ -52,7 +52,7 @@
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
   header.hero {
     padding: 72px 0 40px;
-    text-align: center;
+    text-align: left;
   }
   header.hero h1 {
     font-size: clamp(28px, 5vw, 44px);
@@ -63,7 +63,7 @@
     color: var(--text-dim);
     font-size: 18px;
     max-width: 640px;
-    margin: 0 auto;
+    margin: 0;
   }
   .accent { color: var(--accent); }
 
@@ -78,7 +78,7 @@
   }
   nav.filters .progress {
     max-width: 520px;
-    margin: 0 auto 14px;
+    margin: 0 0 14px;
   }
   nav.filters .progress .label {
     display: flex;
@@ -208,7 +208,7 @@
   .hint-dropdown.open { display: block; }
   .hint-dropdown a { color: var(--text-dim); text-decoration: underline; }
   .hint-dropdown a:hover { color: var(--accent); }
-  nav.filters .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  nav.filters .row { display: flex; gap: 10px; justify-content: flex-start; flex-wrap: wrap; }
   nav.filters button {
     border: 1px solid var(--border);
     background: var(--bg-card);
@@ -486,7 +486,7 @@
     border-bottom: none;
     border-radius: 20px 20px 0 0;
     box-shadow: var(--shadow);
-    padding: 20px;
+    padding: 20px 20px 100px;
     max-height: 75vh;
     display: flex;
     flex-direction: column;
@@ -593,33 +593,6 @@
     font-size: 12px;
     color: var(--text-dim);
   }
-  .notes-footer-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .notes-footer-actions {
-    display: flex;
-    gap: 14px;
-    flex-shrink: 0;
-  }
-  .notes-export {
-    border: none;
-    background: none;
-    color: var(--accent);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0;
-    flex-shrink: 0;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    transition: text-decoration-color .15s ease;
-  }
-  .notes-export:hover { text-decoration-color: var(--accent); }
-
   footer {
     margin-top: 120px;
     padding: 64px 0 60px;
@@ -662,6 +635,7 @@
 </header>
 
 <nav class="filters">
+ <div class="wrap">
   <div class="progress">
     <div class="label">
       <span class="progress-menu-wrap">
@@ -696,6 +670,7 @@
       Избранное <span class="fav-count" id="fav-count">0</span>
     </button>
   </div>
+ </div>
 </nav>
 
 <div class="wrap">
@@ -1275,11 +1250,6 @@
     <input type="text" id="notes-input" placeholder="Вставьте ссылку или напишите заметку" autocomplete="off" />
     <button type="submit">Добавить</button>
   </form>
-  <div class="notes-footer-row">
-    <p class="notes-hint">Хранится локально в этом браузере. Скачать все заметки можно в футере страницы.</p>
-    <button type="button" class="notes-export" id="notes-import-btn">⬆ Загрузить .md</button>
-  </div>
-  <input type="file" id="notes-import-input" accept=".md,text/markdown,text/plain" style="display:none" />
 </div>
 
 <script>
@@ -1641,67 +1611,4 @@
   var footerExportBtn = document.getElementById('notes-export-footer');
   if (footerExportBtn) footerExportBtn.addEventListener('click', exportNotesAsMarkdown);
 
-  function parseNotesMarkdown(text) {
-    var titleMap = buildTitleMap();
-    var idByTitle = {};
-    Object.keys(titleMap).forEach(function (id) { idByTitle[titleMap[id]] = id; });
-    var lines = text.split(/\r?\n/);
-    var result = {};
-    var unmatched = [];
-    var currentId = null;
-    var currentTitle = null;
-    lines.forEach(function (line) {
-      var headingMatch = line.match(/^##\s+(.+?)\s*$/);
-      if (headingMatch) {
-        currentTitle = headingMatch[1];
-        currentId = idByTitle[currentTitle] || null;
-        if (!currentId && unmatched.indexOf(currentTitle) === -1) unmatched.push(currentTitle);
-        return;
-      }
-      var itemMatch = line.match(/^[-*]\s+(.+?)\s*$/);
-      if (itemMatch && currentId) {
-        if (!result[currentId]) result[currentId] = [];
-        result[currentId].push({ text: itemMatch[1] });
-      }
-    });
-    return { result: result, unmatched: unmatched };
-  }
-
-  document.getElementById('notes-import-btn').addEventListener('click', function () {
-    document.getElementById('notes-import-input').click();
-  });
-
-  document.getElementById('notes-import-input').addEventListener('change', function (e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function () {
-      var parsed = parseNotesMarkdown(String(reader.result));
-      var s = loadNotes();
-      var addedCount = 0;
-      var affectedIds = [];
-      Object.keys(parsed.result).forEach(function (id) {
-        if (!s[id]) s[id] = [];
-        var existingTexts = s[id].map(function (item) { return item.text; });
-        parsed.result[id].forEach(function (item) {
-          if (existingTexts.indexOf(item.text) === -1) {
-            s[id].push(item);
-            existingTexts.push(item.text);
-            addedCount++;
-          }
-        });
-        affectedIds.push(id);
-      });
-      saveNotes(s);
-      affectedIds.forEach(refreshNoteBtnState);
-      if (currentNotesId && affectedIds.indexOf(currentNotesId) !== -1) renderNotesList();
-      var msg = 'Импортировано новых заметок: ' + addedCount + '.';
-      if (parsed.unmatched.length) {
-        msg += '\nНе найдено соответствий на странице для: ' + parsed.unmatched.join(', ');
-      }
-      alert(msg);
-      e.target.value = '';
-    };
-    reader.readAsText(file);
-  });
 </script>
