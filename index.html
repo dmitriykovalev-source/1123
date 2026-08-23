@@ -1,5 +1,5 @@
 <title>Figma для дизайнера</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%8E%A8</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2211%22 cy=%2211%22 r=%229%22 fill=%22%23111%22/><circle cx=%2221%22 cy=%2211%22 r=%229%22 fill=%22%23111%22/><circle cx=%2216%22 cy=%2221%22 r=%229%22 fill=%22%23111%22/></svg>" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="Важные и новые (с 2024 года) фичи Figma: что они делают и как влияют на работу дизайнера" />
 <style>
@@ -95,17 +95,20 @@
   .progress-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     border: none;
     background: none;
-    color: var(--text-dim);
-    font-size: 13px;
+    color: var(--text);
+    font-size: 19px;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     padding: 0;
   }
-  .progress-trigger:hover { color: var(--text); }
+  .progress-trigger:hover { color: var(--accent); }
   .progress-trigger svg {
+    width: 12px;
+    height: 8px;
     transition: transform .15s ease;
   }
   .progress-trigger.open svg { transform: rotate(180deg); }
@@ -179,9 +182,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--text);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-dim);
   }
   .hint-trigger svg {
     flex-shrink: 0;
@@ -209,7 +212,7 @@
   .hint-dropdown a { color: var(--text-dim); text-decoration: underline; }
   .hint-dropdown a:hover { color: var(--accent); }
   nav.filters .row { display: flex; gap: 10px; justify-content: flex-start; flex-wrap: wrap; }
-  nav.filters button {
+  nav.filters .row button {
     border: 1px solid var(--border);
     background: var(--bg-card);
     color: var(--text);
@@ -219,7 +222,7 @@
     cursor: pointer;
     transition: all .15s ease;
   }
-  nav.filters button.active {
+  nav.filters .row button.active {
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
@@ -640,7 +643,7 @@
     <div class="label">
       <span class="progress-menu-wrap">
         <button class="progress-trigger" id="progress-trigger">
-          Прогресс изучения
+          Прогресс
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="progress-dropdown" id="progress-dropdown">
