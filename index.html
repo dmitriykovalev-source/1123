@@ -581,6 +581,28 @@
     text-align: center;
   }
   footer a { color: var(--text-dim); }
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .footer-text { margin: 0; }
+  .footer-export {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .footer-export:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 </style>
 
 <header class="hero">
@@ -1163,8 +1185,9 @@
 </div>
 
 <footer>
-  <div class="wrap">
-    Собрано вручную, ссылки ведут на поиск YouTube — так они не протухают и всегда ведут на актуальные видео. Прогресс хранится локально в браузере (localStorage), только на этом устройстве.
+  <div class="wrap footer-inner">
+    <p class="footer-text">Собрано вручную, ссылки ведут на поиск YouTube — так они не протухают и всегда ведут на актуальные видео. Прогресс хранится локально в браузере (localStorage), только на этом устройстве.</p>
+    <button type="button" class="footer-export" id="notes-export-footer">⬇ Скачать все заметки</button>
   </div>
 </footer>
 
@@ -1476,7 +1499,7 @@
     return map;
   }
 
-  document.getElementById('notes-export').addEventListener('click', function () {
+  function exportNotesAsMarkdown() {
     var notesState = loadNotes();
     var titleMap = buildTitleMap();
     var ids = Object.keys(titleMap).filter(function (id) {
@@ -1504,7 +1527,10 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  });
+  }
+  document.getElementById('notes-export').addEventListener('click', exportNotesAsMarkdown);
+  var footerExportBtn = document.getElementById('notes-export-footer');
+  if (footerExportBtn) footerExportBtn.addEventListener('click', exportNotesAsMarkdown);
 
   function parseNotesMarkdown(text) {
     var titleMap = buildTitleMap();
