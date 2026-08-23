@@ -546,11 +546,16 @@
   }
   .notes-item {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 6px;
     padding: 10px 12px;
     border: 1px solid var(--border);
     border-radius: 10px;
+  }
+  .notes-item-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .notes-item a {
     flex: 1;
@@ -563,6 +568,12 @@
     white-space: nowrap;
   }
   .notes-item a:hover { text-decoration: underline; }
+  .notes-item-comment {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+  }
   .notes-item-delete {
     border: none;
     background: none;
@@ -575,10 +586,12 @@
   .notes-item-delete:hover { color: var(--accent-2); }
   .notes-form {
     display: flex;
+    flex-direction: column;
     gap: 8px;
   }
-  .notes-form input {
-    flex: 1;
+  .notes-form input,
+  .notes-form textarea {
+    width: 100%;
     min-width: 0;
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -587,8 +600,10 @@
     background: var(--bg);
     color: var(--text);
     font-family: inherit;
+    resize: vertical;
   }
   .notes-form button {
+    align-self: flex-end;
     border: none;
     background: var(--accent);
     color: #fff;
@@ -1258,7 +1273,8 @@
   </div>
   <div class="notes-list" id="notes-list"></div>
   <form class="notes-form" id="notes-form">
-    <input type="text" id="notes-input" placeholder="Вставьте ссылку или напишите заметку" autocomplete="off" />
+    <input type="url" id="notes-url-input" placeholder="Вставьте ссылку" autocomplete="off" />
+    <textarea id="notes-comment-input" placeholder="Комментарий к ссылке (необязательно)" rows="2"></textarea>
     <button type="submit">Добавить</button>
   </form>
 </div>
@@ -1476,7 +1492,8 @@
   var notesSheet = document.getElementById('notes-sheet');
   var notesList = document.getElementById('notes-list');
   var notesForm = document.getElementById('notes-form');
-  var notesInput = document.getElementById('notes-input');
+  var notesUrlInput = document.getElementById('notes-url-input');
+  var notesCommentInput = document.getElementById('notes-comment-input');
   var notesSubEl = document.getElementById('notes-sheet-sub');
   var notesCloseBtn = document.getElementById('notes-close');
   var currentNotesId = null;
@@ -1516,11 +1533,16 @@
     items.forEach(function (item, idx) {
       var row = document.createElement('div');
       row.className = 'notes-item';
-      var isUrl = /^https?:\/\//i.test(item.text);
+
+      var top = document.createElement('div');
+      top.className = 'notes-item-top';
+
+      var url = item.url || item.text || '';
+      var isUrl = /^https?:\/\//i.test(url);
       var el;
       if (isUrl) {
         el = document.createElement('a');
-        el.href = item.text;
+        el.href = url;
         el.target = '_blank';
         el.rel = 'noopener';
       } else {
@@ -1532,8 +1554,9 @@
         el.style.textOverflow = 'ellipsis';
         el.style.whiteSpace = 'nowrap';
       }
-      el.textContent = item.text;
-      row.appendChild(el);
+      el.textContent = url;
+      top.appendChild(el);
+
       var del = document.createElement('button');
       del.className = 'notes-item-delete';
       del.setAttribute('aria-label', 'Удалить');
@@ -1545,7 +1568,16 @@
         renderNotesList();
         refreshNoteBtnState(currentNotesId);
       });
-      row.appendChild(del);
+      top.appendChild(del);
+      row.appendChild(top);
+
+      if (item.comment) {
+        var comment = document.createElement('p');
+        comment.className = 'notes-item-comment';
+        comment.textContent = item.comment;
+        row.appendChild(comment);
+      }
+
       notesList.appendChild(row);
     });
   }
@@ -1555,8 +1587,9 @@
     renderNotesList();
     notesBackdrop.classList.add('open');
     notesSheet.classList.add('open');
-    notesInput.value = '';
-    notesInput.focus();
+    notesUrlInput.value = '';
+    notesCommentInput.value = '';
+    notesUrlInput.focus();
   }
   function closeNotesSheet() {
     notesBackdrop.classList.remove('open');
@@ -1578,13 +1611,15 @@
   });
   notesForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var val = notesInput.value.trim();
-    if (!val || !currentNotesId) return;
+    var url = notesUrlInput.value.trim();
+    var comment = notesCommentInput.value.trim();
+    if (!url || !currentNotesId) return;
     var s = loadNotes();
     if (!s[currentNotesId]) s[currentNotesId] = [];
-    s[currentNotesId].push({ text: val });
+    s[currentNotesId].push({ url: url, comment: comment });
     saveNotes(s);
-    notesInput.value = '';
+    notesUrlInput.value = '';
+    notesCommentInput.value = '';
     renderNotesList();
     refreshNoteBtnState(currentNotesId);
   });
@@ -1612,7 +1647,9 @@
       lines.push('## ' + titleMap[id]);
       lines.push('');
       notesState[id].forEach(function (item) {
-        lines.push('- ' + item.text);
+        var url = item.url || item.text || '';
+        lines.push('- ' + url);
+        if (item.comment) lines.push('  ' + item.comment);
       });
       lines.push('');
     });
