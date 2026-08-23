@@ -127,6 +127,7 @@
     padding: 4px;
     display: none;
     z-index: 20;
+    width: max-content;
     min-width: 140px;
   }
   .progress-dropdown.open { display: block; }
@@ -144,6 +145,7 @@
     padding: 6px 8px;
     border-radius: 6px;
     text-align: left;
+    white-space: nowrap;
     transition: background .12s ease, color .12s ease;
   }
   .reset-progress:hover {
@@ -435,7 +437,7 @@
     border: 1px solid var(--border);
   }
   .card h3 {
-    margin: 0;
+    margin: 16px 0 0;
     font-size: 19px;
   }
   .card.done h3 {
