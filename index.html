@@ -4,7 +4,7 @@
 <meta name="description" content="Важные и новые (с 2024 года) фичи Figma: что они делают и как влияют на работу дизайнера" />
 <style>
   :root {
-    --bg: #f7f7f8;
+    --bg: #ffffff;
     --bg-card: #ffffff;
     --text: #16161a;
     --text-dim: #5c5c66;
@@ -19,8 +19,7 @@
     --done-bg: #f1fbf4;
     --done-border: #b8e6c4;
     --done-accent: #1f9d55;
-    --panel-bg: #eef0f5;
-    --progress-gray: #c7c7d1;
+    --panel-bg: #f3f4f8;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -40,7 +39,6 @@
       --done-border: #245536;
       --done-accent: #4ade80;
       --panel-bg: #15151b;
-      --progress-gray: #4b4b57;
     }
   }
   * { box-sizing: border-box; }
@@ -155,7 +153,7 @@
     height: 100%;
     width: 0%;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--progress-gray), var(--done-accent));
+    background: var(--done-accent);
     transition: width .25s ease;
   }
   nav.filters .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -212,6 +210,30 @@
     font-size: 15px;
   }
 
+  .section-complete-banner {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--done-accent);
+    background: var(--done-bg);
+    border: 1px solid var(--done-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin: 0 0 20px;
+  }
+  section.group.all-done .section-complete-banner { display: flex; }
+  section.group.all-done:not(.force-open) .grid-panel { display: none; }
+  .section-toggle {
+    border: none;
+    background: none;
+    color: var(--done-accent);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+  }
   .grid-panel {
     background: var(--panel-bg);
     border-radius: 24px;
@@ -293,6 +315,24 @@
   }
   .note-btn:hover { color: var(--accent); transform: scale(1.1); }
   .note-btn.has-notes { color: var(--accent); }
+  .note-count {
+    display: none;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    margin-left: -12px;
+    align-self: flex-start;
+    border-radius: 999px;
+    background: var(--accent-2);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: center;
+    box-shadow: 0 0 0 2px var(--bg-card);
+    pointer-events: none;
+  }
+  .note-count.visible { display: inline-block; }
   .done-check {
     width: 20px;
     height: 20px;
@@ -309,8 +349,8 @@
     color: var(--tag-text);
   }
   .card.new .tag {
-    background: var(--tag-bg-2);
-    color: var(--tag-text-2);
+    background: var(--border);
+    color: var(--text-dim);
   }
   .card.done .tag {
     background: var(--done-border);
@@ -504,8 +544,33 @@
     margin: 0;
     font-size: 12px;
     color: var(--text-dim);
-    text-align: center;
   }
+  .notes-footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .notes-footer-actions {
+    display: flex;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .notes-export {
+    border: none;
+    background: none;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: text-decoration-color .15s ease;
+  }
+  .notes-export:hover { text-decoration-color: var(--accent); }
 
   footer {
     margin-top: 64px;
@@ -558,6 +623,7 @@
   <section class="group" data-group="core">
     <h2>Важные фичи</h2>
     <p class="subtitle">База, без которой продуктовый дизайн в Figma превращается в ручной труд.</p>
+    <div class="section-complete-banner">✅ Все фичи в этом блоке изучены — <button type="button" class="section-toggle">показать</button></div>
     <div class="grid-panel">
     <div class="grid">
 
@@ -569,7 +635,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-auto-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-auto-layout" data-title="Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-auto-layout" data-title="Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-auto-layout"></span>
           </div>
         </div>
         <h3>Auto Layout</h3>
@@ -589,7 +655,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-variants" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-variants" data-title="Компоненты и варианты (Variants)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-variants" data-title="Компоненты и варианты (Variants)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-variants"></span>
           </div>
         </div>
         <h3>Компоненты и варианты (Variants)</h3>
@@ -609,7 +675,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-component-properties" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-component-properties" data-title="Component Properties" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-component-properties" data-title="Component Properties" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-component-properties"></span>
           </div>
         </div>
         <h3>Component Properties</h3>
@@ -629,7 +695,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-constraints" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-constraints" data-title="Constraints и адаптивный resize" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-constraints" data-title="Constraints и адаптивный resize" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-constraints"></span>
           </div>
         </div>
         <h3>Constraints и адаптивный resize</h3>
@@ -649,7 +715,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-prototyping" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-prototyping" data-title="Интерактивные прототипы (overlays, Smart Animate)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-prototyping" data-title="Интерактивные прототипы (overlays, Smart Animate)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-prototyping"></span>
           </div>
         </div>
         <h3>Интерактивные прототипы (overlays, Smart Animate)</h3>
@@ -669,7 +735,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-styles" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-styles" data-title="Локальные стили (цвет, текст, эффекты)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-styles" data-title="Локальные стили (цвет, текст, эффекты)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-styles"></span>
           </div>
         </div>
         <h3>Локальные стили (цвет, текст, эффекты)</h3>
@@ -689,7 +755,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-boolean" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-boolean" data-title="Boolean Operations и векторное редактирование" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-boolean" data-title="Boolean Operations и векторное редактирование" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-boolean"></span>
           </div>
         </div>
         <h3>Boolean Operations и векторное редактирование</h3>
@@ -709,7 +775,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="core-version-history" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="core-version-history" data-title="История версий и ветки (Branching)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="core-version-history" data-title="История версий и ветки (Branching)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-version-history"></span>
           </div>
         </div>
         <h3>История версий и ветки (Branching)</h3>
@@ -728,6 +794,7 @@
   <section class="group" data-group="new">
     <h2>Новое с 2024 года</h2>
     <p class="subtitle">Всё, что заметно поменяло рабочий процесс дизайнера за последние два года.</p>
+    <div class="section-complete-banner">✅ Все фичи в этом блоке изучены — <button type="button" class="section-toggle">показать</button></div>
     <div class="grid-panel">
     <div class="grid">
 
@@ -739,7 +806,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-dev-mode" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-dev-mode" data-title="Dev Mode" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-dev-mode" data-title="Dev Mode" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-dev-mode"></span>
           </div>
         </div>
         <h3>Dev Mode</h3>
@@ -759,7 +826,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-variables" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-variables" data-title="Variables и Modes (темизация)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-variables" data-title="Variables и Modes (темизация)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-variables"></span>
           </div>
         </div>
         <h3>Variables и Modes (темизация)</h3>
@@ -779,7 +846,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-conditional-logic" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-conditional-logic" data-title="Условная логика и выражения в прототипах" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-conditional-logic" data-title="Условная логика и выражения в прототипах" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-conditional-logic"></span>
           </div>
         </div>
         <h3>Условная логика и выражения в прототипах</h3>
@@ -799,7 +866,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-grid-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-grid-layout" data-title="Grid-раскладки в Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-grid-layout" data-title="Grid-раскладки в Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-grid-layout"></span>
           </div>
         </div>
         <h3>Grid-раскладки в Auto Layout</h3>
@@ -819,7 +886,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-code-connect" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-code-connect" data-title="Code Connect" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-code-connect" data-title="Code Connect" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-code-connect"></span>
           </div>
         </div>
         <h3>Code Connect</h3>
@@ -834,11 +901,11 @@
         <div class="card-top">
           <div class="card-top-left">
             <input type="checkbox" class="done-check" data-id="new-sites" aria-label="Отметить фичу как изученную" />
-            <span class="tag">Publishing</span>
+            <span class="tag">Config 2025</span>
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-sites" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-sites" data-title="Figma Sites" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-sites" data-title="Figma Sites" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-sites"></span>
           </div>
         </div>
         <h3>Figma Sites</h3>
@@ -854,11 +921,11 @@
         <div class="card-top">
           <div class="card-top-left">
             <input type="checkbox" class="done-check" data-id="new-make" aria-label="Отметить фичу как изученную" />
-            <span class="tag">AI</span>
+            <span class="tag">Config 2025</span>
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-make" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-make" data-title="Figma Make" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-make" data-title="Figma Make" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-make"></span>
           </div>
         </div>
         <h3>Figma Make</h3>
@@ -874,11 +941,11 @@
         <div class="card-top">
           <div class="card-top-left">
             <input type="checkbox" class="done-check" data-id="new-buzz" aria-label="Отметить фичу как изученную" />
-            <span class="tag">Content</span>
+            <span class="tag">Config 2025</span>
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-buzz" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-buzz" data-title="Figma Buzz" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-buzz" data-title="Figma Buzz" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-buzz"></span>
           </div>
         </div>
         <h3>Figma Buzz</h3>
@@ -898,7 +965,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-mcp-server" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-mcp-server" data-title="Dev Mode MCP Server" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-mcp-server" data-title="Dev Mode MCP Server" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-mcp-server"></span>
           </div>
         </div>
         <h3>Dev Mode MCP Server</h3>
@@ -918,7 +985,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-code-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-code-layers" data-title="Code Layers" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-code-layers" data-title="Code Layers" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-code-layers"></span>
           </div>
         </div>
         <h3>Code Layers</h3>
@@ -937,7 +1004,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-figma-motion" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-figma-motion" data-title="Figma Motion" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-figma-motion" data-title="Figma Motion" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-figma-motion"></span>
           </div>
         </div>
         <h3>Figma Motion</h3>
@@ -957,7 +1024,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-shader-effects" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-shader-effects" data-title="AI-шейдеры и эффекты" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-shader-effects" data-title="AI-шейдеры и эффекты" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-shader-effects"></span>
           </div>
         </div>
         <h3>AI-шейдеры и эффекты</h3>
@@ -977,7 +1044,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-weave" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-weave" data-title="Weave на канвасе" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-weave" data-title="Weave на канвасе" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-weave"></span>
           </div>
         </div>
         <h3>Weave на канвасе</h3>
@@ -997,7 +1064,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-generative-plugins" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-generative-plugins" data-title="Генеративные плагины" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-generative-plugins" data-title="Генеративные плагины" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-generative-plugins"></span>
           </div>
         </div>
         <h3>Генеративные плагины</h3>
@@ -1017,7 +1084,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-figma-agent" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-figma-agent" data-title="Расширенный Figma Agent" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-figma-agent" data-title="Расширенный Figma Agent" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-figma-agent"></span>
           </div>
         </div>
         <h3>Расширенный Figma Agent</h3>
@@ -1037,7 +1104,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-first-draft" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-first-draft" data-title="First Draft" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-first-draft" data-title="First Draft" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-first-draft"></span>
           </div>
         </div>
         <h3>First Draft</h3>
@@ -1057,7 +1124,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-rename-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-rename-layers" data-title="AI-переименование слоёв" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-rename-layers" data-title="AI-переименование слоёв" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-rename-layers"></span>
           </div>
         </div>
         <h3>AI-переименование слоёв</h3>
@@ -1077,7 +1144,7 @@
           </div>
           <div class="card-top-right">
           <button class="fav-btn" data-id="new-visual-search" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          <button class="note-btn" data-id="new-visual-search" data-title="Visual Search" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button class="note-btn" data-id="new-visual-search" data-title="Visual Search" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-visual-search"></span>
           </div>
         </div>
         <h3>Visual Search</h3>
@@ -1115,7 +1182,14 @@
     <input type="text" id="notes-input" placeholder="Вставьте ссылку или напишите заметку" autocomplete="off" />
     <button type="submit">Добавить</button>
   </form>
-  <p class="notes-hint">Хранится локально в этом браузере.</p>
+  <div class="notes-footer-row">
+    <p class="notes-hint">Хранится локально в этом браузере. Экспорт — в Markdown, подходит для Obsidian.</p>
+    <div class="notes-footer-actions">
+      <button type="button" class="notes-export" id="notes-import-btn">⬆ Загрузить .md</button>
+      <button type="button" class="notes-export" id="notes-export">⬇ Скачать все заметки</button>
+    </div>
+  </div>
+  <input type="file" id="notes-import-input" accept=".md,text/markdown,text/plain" style="display:none" />
 </div>
 
 <script>
@@ -1212,6 +1286,21 @@
     var card = checkbox.closest('.card');
     card.classList.toggle('done', checkbox.checked);
   }
+  function updateSectionCollapse() {
+    groups.forEach(function (g) {
+      var boxes = g.querySelectorAll('.done-check');
+      var allDone = boxes.length > 0 && Array.prototype.every.call(boxes, function (cb) { return cb.checked; });
+      if (!allDone) g.classList.remove('force-open');
+      g.classList.toggle('all-done', allDone);
+    });
+  }
+  document.querySelectorAll('.section-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var section = btn.closest('section.group');
+      section.classList.toggle('force-open');
+      btn.textContent = section.classList.contains('force-open') ? 'скрыть' : 'показать';
+    });
+  });
 
   var state = loadState();
   checkboxes.forEach(function (cb) {
@@ -1220,6 +1309,7 @@
     applyCardState(cb);
   });
   updateProgress();
+  updateSectionCollapse();
 
   checkboxes.forEach(function (cb) {
     cb.addEventListener('change', function () {
@@ -1229,6 +1319,7 @@
       saveState(s);
       applyCardState(cb);
       updateProgress();
+      updateSectionCollapse();
     });
   });
 
@@ -1254,6 +1345,7 @@
       applyCardState(cb);
     });
     updateProgress();
+    updateSectionCollapse();
     progressTrigger.classList.remove('open');
     progressDropdown.classList.remove('open');
   });
@@ -1283,6 +1375,10 @@
     var count = (state[id] || []).length;
     document.querySelectorAll('.note-btn[data-id="' + id + '"]').forEach(function (b) {
       b.classList.toggle('has-notes', count > 0);
+    });
+    document.querySelectorAll('.note-count[data-id="' + id + '"]').forEach(function (b) {
+      b.textContent = count;
+      b.classList.toggle('visible', count > 0);
     });
   }
   function renderNotesList() {
@@ -1370,5 +1466,107 @@
     notesInput.value = '';
     renderNotesList();
     refreshNoteBtnState(currentNotesId);
+  });
+
+  function buildTitleMap() {
+    var map = {};
+    document.querySelectorAll('.note-btn').forEach(function (b) {
+      map[b.getAttribute('data-id')] = b.getAttribute('data-title');
+    });
+    return map;
+  }
+
+  document.getElementById('notes-export').addEventListener('click', function () {
+    var notesState = loadNotes();
+    var titleMap = buildTitleMap();
+    var ids = Object.keys(titleMap).filter(function (id) {
+      return notesState[id] && notesState[id].length;
+    });
+    if (!ids.length) {
+      alert('Пока нет сохранённых заметок.');
+      return;
+    }
+    var lines = ['# Мои заметки — Figma фичи', ''];
+    ids.forEach(function (id) {
+      lines.push('## ' + titleMap[id]);
+      lines.push('');
+      notesState[id].forEach(function (item) {
+        lines.push('- ' + item.text);
+      });
+      lines.push('');
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'figma-guide-notes.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  function parseNotesMarkdown(text) {
+    var titleMap = buildTitleMap();
+    var idByTitle = {};
+    Object.keys(titleMap).forEach(function (id) { idByTitle[titleMap[id]] = id; });
+    var lines = text.split(/\r?\n/);
+    var result = {};
+    var unmatched = [];
+    var currentId = null;
+    var currentTitle = null;
+    lines.forEach(function (line) {
+      var headingMatch = line.match(/^##\s+(.+?)\s*$/);
+      if (headingMatch) {
+        currentTitle = headingMatch[1];
+        currentId = idByTitle[currentTitle] || null;
+        if (!currentId && unmatched.indexOf(currentTitle) === -1) unmatched.push(currentTitle);
+        return;
+      }
+      var itemMatch = line.match(/^[-*]\s+(.+?)\s*$/);
+      if (itemMatch && currentId) {
+        if (!result[currentId]) result[currentId] = [];
+        result[currentId].push({ text: itemMatch[1] });
+      }
+    });
+    return { result: result, unmatched: unmatched };
+  }
+
+  document.getElementById('notes-import-btn').addEventListener('click', function () {
+    document.getElementById('notes-import-input').click();
+  });
+
+  document.getElementById('notes-import-input').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var parsed = parseNotesMarkdown(String(reader.result));
+      var s = loadNotes();
+      var addedCount = 0;
+      var affectedIds = [];
+      Object.keys(parsed.result).forEach(function (id) {
+        if (!s[id]) s[id] = [];
+        var existingTexts = s[id].map(function (item) { return item.text; });
+        parsed.result[id].forEach(function (item) {
+          if (existingTexts.indexOf(item.text) === -1) {
+            s[id].push(item);
+            existingTexts.push(item.text);
+            addedCount++;
+          }
+        });
+        affectedIds.push(id);
+      });
+      saveNotes(s);
+      affectedIds.forEach(refreshNoteBtnState);
+      if (currentNotesId && affectedIds.indexOf(currentNotesId) !== -1) renderNotesList();
+      var msg = 'Импортировано новых заметок: ' + addedCount + '.';
+      if (parsed.unmatched.length) {
+        msg += '\nНе найдено соответствий на странице для: ' + parsed.unmatched.join(', ');
+      }
+      alert(msg);
+      e.target.value = '';
+    };
+    reader.readAsText(file);
   });
 </script>
