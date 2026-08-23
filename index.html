@@ -156,14 +156,58 @@
     background: var(--done-accent);
     transition: width .25s ease;
   }
-  .progress-hint {
-    margin: 8px 0 0;
-    font-size: 12px;
-    line-height: 1.4;
+  .hint-wrap {
+    position: relative;
+    margin-top: 10px;
+  }
+  .hint-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+  }
+  .hint-trigger .hint-thesis {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .hint-trigger svg {
+    flex-shrink: 0;
+    color: var(--text-dim);
+    transition: transform .15s ease;
+  }
+  .hint-trigger.open svg { transform: rotate(180deg); }
+  .hint-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    display: none;
+    z-index: 20;
+    font-size: 12.5px;
+    line-height: 1.5;
     color: var(--text-dim);
   }
-  .progress-hint a { color: var(--text-dim); text-decoration: underline; }
-  .progress-hint a:hover { color: var(--accent); }
+  .hint-dropdown.open { display: block; }
+  .hint-dropdown a { color: var(--text-dim); text-decoration: underline; }
+  .hint-dropdown a:hover { color: var(--accent); }
   nav.filters .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   nav.filters button {
     border: 1px solid var(--border);
@@ -243,9 +287,9 @@
     padding: 0;
   }
   .grid-panel {
-    background: var(--panel-bg);
-    border-radius: 24px;
-    padding: 28px;
+    background: none;
+    border-radius: 0;
+    padding: 0;
   }
   .grid {
     display: grid;
@@ -253,7 +297,6 @@
     gap: 20px;
   }
   @media (max-width: 640px) {
-    .grid-panel { padding: 16px; border-radius: 16px; }
   }
 
   .card {
@@ -353,14 +396,6 @@
     font-weight: 600;
     padding: 4px 10px;
     border-radius: 999px;
-    background: var(--tag-bg);
-    color: var(--tag-text);
-  }
-  .card.new .tag {
-    background: var(--border);
-    color: var(--text-dim);
-  }
-  .card.new .tag.tag-config {
     background: var(--bg);
     color: var(--text-dim);
     border: 1px solid var(--border);
@@ -586,9 +621,10 @@
   .notes-export:hover { text-decoration-color: var(--accent); }
 
   footer {
-    margin-top: 96px;
-    padding: 56px 0 60px;
+    margin-top: 120px;
+    padding: 64px 0 60px;
     border-top: 1px solid var(--border);
+    background: var(--panel-bg);
     color: var(--text-dim);
     font-size: 13.5px;
     text-align: center;
@@ -640,7 +676,15 @@
       <span><b id="progress-count">0</b> / <span id="progress-total">16</span></span>
     </div>
     <div class="progress-bar"><div class="fill" id="progress-fill"></div></div>
-    <p class="progress-hint" id="progress-hint"></p>
+    <div class="hint-wrap">
+      <button class="hint-trigger" id="hint-trigger" type="button">
+        <span class="hint-thesis" id="hint-thesis">Считаем ваш прогресс…</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="hint-dropdown" id="hint-dropdown">
+        <p id="hint-full" style="margin:0;"></p>
+      </div>
+    </div>
   </div>
   <div class="row">
     <button data-filter="all" class="active">Все фичи</button>
@@ -670,16 +714,16 @@
             <span class="tag">Layout</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-auto-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-auto-layout" data-title="Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-auto-layout"></span>
+          <button class="fav-btn" data-id="core-auto-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Auto Layout</h3>
         <p class="desc">Контейнеры сами пересчитывают размеры, отступы и позиции дочерних элементов при изменении контента — как flexbox в CSS, но визуально, без кода.</p>
         <p class="impact"><b>Импакт</b>Макет не «ломается» при длинном имени, другом языке или новом элементе — не нужно вручную двигать слои после каждой правки контента.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kg0XA0MPZ0w" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Auto+Layout+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kg0XA0MPZ0w" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -690,16 +734,16 @@
             <span class="tag">Components</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-variants" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-variants" data-title="Компоненты и варианты (Variants)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-variants"></span>
+          <button class="fav-btn" data-id="core-variants" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Компоненты и варианты (Variants)</h3>
         <p class="desc">Один компонент с набором вариаций (размер, состояние, тема), которые переключаются как свойства, а не хранятся отдельными слоями.</p>
         <p class="impact"><b>Импакт</b>Правка в главном компоненте моментально расходится по всем инстансам в проекте — обновление кнопки во всём файле занимает секунды, а не часы.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=UUJdwx_Jd74" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+components+and+variants+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=UUJdwx_Jd74" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -710,16 +754,16 @@
             <span class="tag">Components</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-component-properties" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-component-properties" data-title="Component Properties" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-component-properties"></span>
+          <button class="fav-btn" data-id="core-component-properties" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Component Properties</h3>
         <p class="desc">Свойства компонента (instance swap, boolean, текст, вложенные инстансы), которые можно менять прямо в панели, не залезая в структуру слоёв.</p>
         <p class="impact"><b>Импакт</b>Библиотека не «взрывается» от количества вариантов — одна карточка обслуживает десятки конфигураций через простые переключатели.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ooNE7rcd8Ig" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+component+properties+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ooNE7rcd8Ig" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -730,16 +774,16 @@
             <span class="tag">Layout</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-constraints" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-constraints" data-title="Constraints и адаптивный resize" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-constraints"></span>
+          <button class="fav-btn" data-id="core-constraints" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Constraints и адаптивный resize</h3>
         <p class="desc">Правила «прилипания» слоя к краям и центру рамки при её растягивании — база адаптивности там, где Auto Layout избыточен.</p>
         <p class="impact"><b>Импакт</b>Один макет проверяется на разных размерах экрана растягиванием фрейма, а не рисованием версии под каждый брейкпоинт.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3jnvH9gSskA" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+constraints+responsive+resize+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3jnvH9gSskA" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -750,16 +794,16 @@
             <span class="tag">Prototyping</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-prototyping" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-prototyping" data-title="Интерактивные прототипы (overlays, Smart Animate)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-prototyping"></span>
+          <button class="fav-btn" data-id="core-prototyping" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Интерактивные прототипы (overlays, Smart Animate)</h3>
         <p class="desc">Связки экранов с переходами, модалками, оверлеями и плавной анимацией между состояниями без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Прототип, максимально близкий к реальному продукту, можно протестировать на пользователях и показать команде до старта разработки.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ygkAJM4wl2M" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+prototyping+smart+animate+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ygkAJM4wl2M" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -770,16 +814,16 @@
             <span class="tag">System</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-styles" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-styles" data-title="Локальные стили (цвет, текст, эффекты)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-styles"></span>
+          <button class="fav-btn" data-id="core-styles" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Локальные стили (цвет, текст, эффекты)</h3>
         <p class="desc">Именованные наборы значений (цвет, типографика, тени), на которые ссылаются слои по всему файлу и библиотекам.</p>
         <p class="impact"><b>Импакт</b>Ребрендинг или смена акцентного цвета — это правка одного стиля, а не поиск всех использований вручную по слоям.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=RL7oPauQRSw" title="Канал: предположительно Alexey Bychkov">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+styles+color+text+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=RL7oPauQRSw" title="Канал: предположительно Alexey Bychkov">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -790,16 +834,16 @@
             <span class="tag">Vector</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-boolean" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-boolean" data-title="Boolean Operations и векторное редактирование" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-boolean"></span>
+          <button class="fav-btn" data-id="core-boolean" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Boolean Operations и векторное редактирование</h3>
         <p class="desc">Union, Subtract, Intersect, Exclude для сложных форм плюс полноценный vector network editor для точной работы с точками и кривыми.</p>
         <p class="impact"><b>Импакт</b>Иконки, пиктограммы и кастомные иллюстрации собираются прямо в Figma — не нужно переключаться в Illustrator для базовой векторной работы.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hTIPRersKq4" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+boolean+operations+vector+editing+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hTIPRersKq4" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -810,16 +854,16 @@
             <span class="tag">Workflow</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="core-version-history" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="core-version-history" data-title="История версий и ветки (Branching)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="core-version-history"></span>
+          <button class="fav-btn" data-id="core-version-history" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>История версий и ветки (Branching)</h3>
         <p class="desc">Полный снепшот файла на любой момент времени плюс возможность отвести отдельную «ветку» для рискованных экспериментов.</p>
         <p class="impact"><b>Импакт</b>Можно смело переделывать флоу или дизайн-систему, зная, что в любой момент есть откат к рабочей версии — без страха «всё сломать».</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KIaTNIMFQNE" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+version+history+branching+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KIaTNIMFQNE" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -841,16 +885,16 @@
             <span class="tag">Dev Handoff</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-dev-mode" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-dev-mode" data-title="Dev Mode" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-dev-mode"></span>
+          <button class="fav-btn" data-id="new-dev-mode" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Dev Mode</h3>
         <p class="desc">Отдельный режим для разработчиков: авто-генерация CSS/iOS/Android-сниппетов, инспектор токенов и переменных, аннотации и готовые к копированию значения.</p>
         <p class="impact"><b>Импакт</b>Дизайнер перестаёт быть «переводчиком» макета в спеку — разработчик сам читает точные значения и меньше расходится с макетом в вёрстке.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Ifj8nbwJoRo" title="Канал: MaxGraph - сайты как страсть">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+tutorial+2024+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Ifj8nbwJoRo" title="Канал: MaxGraph - сайты как страсть">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -861,16 +905,16 @@
             <span class="tag">Tokens</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-variables" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-variables" data-title="Variables и Modes (темизация)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-variables"></span>
+          <button class="fav-btn" data-id="new-variables" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Variables и Modes (темизация)</h3>
         <p class="desc">Переменные для цвета, чисел, строк и boolean, собранные в коллекции с режимами (light/dark, density, brand), которые переключаются одним свойством.</p>
         <p class="impact"><b>Импакт</b>Один файл поддерживает light/dark и несколько брендов без дублирования экранов — дизайн-система становится настоящими токенами, а не картинками.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3lfpe-L9QdY" title="Канал: Disarto">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+variables+modes+theming+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3lfpe-L9QdY" title="Канал: Disarto">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -881,16 +925,16 @@
             <span class="tag">Prototyping</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-conditional-logic" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-conditional-logic" data-title="Условная логика и выражения в прототипах" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-conditional-logic"></span>
+          <button class="fav-btn" data-id="new-conditional-logic" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Условная логика и выражения в прототипах</h3>
         <p class="desc">If/else-логика, математические выражения и работа с переменными внутри прототипа — счётчики, тумблеры, простая валидация форм.</p>
         <p class="impact"><b>Импакт</b>Прототип с реальным поведением (не просто «клик — переход») можно тестировать на пользователях без единой строчки кода и без разработчика.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=be0qXMxn1OE" title="Канал: Nexfield Academy">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+conditional+logic+expressions+prototype+variables+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=be0qXMxn1OE" title="Канал: Nexfield Academy">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -901,16 +945,16 @@
             <span class="tag">Layout</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-grid-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-grid-layout" data-title="Grid-раскладки в Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-grid-layout"></span>
+          <button class="fav-btn" data-id="new-grid-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Grid-раскладки в Auto Layout</h3>
         <p class="desc">Настоящая сетка (строки и колонки) внутри Auto Layout-контейнера — аналог CSS Grid, а не имитация через вложенные фреймы.</p>
         <p class="impact"><b>Импакт</b>Дашборды, галереи и карточные сетки собираются без десятков вложенных auto-layout фреймов «для симуляции grid».</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Wf_Kj1lv_3k" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+grid+auto+layout+2024+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Wf_Kj1lv_3k" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -921,8 +965,8 @@
             <span class="tag">Dev Handoff</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-code-connect" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-code-connect" data-title="Code Connect" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-code-connect"></span>
+          <button class="fav-btn" data-id="new-code-connect" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Code Connect</h3>
@@ -940,16 +984,16 @@
             <span class="tag tag-config">Config 2025</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-sites" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-sites" data-title="Figma Sites" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-sites"></span>
+          <button class="fav-btn" data-id="new-sites" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Figma Sites</h3>
         <p class="desc">Публикация сайта прямо из дизайн-файла — с реальным поведением (адаптивность, анимации, формы), без передачи макета в отдельный конструктор или разработку.</p>
         <p class="impact"><b>Импакт</b>Лендинги, промо-страницы и маркетинговые сайты дизайнер доводит от макета до продакшена самостоятельно, минуя цикл разработки.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KmGbVoYMNfc" title="Канал: Даниил Шишко x Pixel Perfect">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Sites+tutorial+2025+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KmGbVoYMNfc" title="Канал: Даниил Шишко x Pixel Perfect">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -961,16 +1005,16 @@
             <span class="tag tag-config">Config 2025</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-buzz" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-buzz" data-title="Figma Buzz" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-buzz"></span>
+          <button class="fav-btn" data-id="new-buzz" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Figma Buzz</h3>
         <p class="desc">Инструмент для быстрой сборки брендированного маркетингового контента по шаблонам, которые задаёт дизайнер, — для соцсетей, баннеров, промо-материалов.</p>
         <p class="impact"><b>Импакт</b>Маркетинг и другие команды сами собирают контент в рамках бренд-гайда, а дизайнер один раз настраивает шаблон вместо ручного производства каждого баннера.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=vILyX-9KYvY" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Buzz+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=vILyX-9KYvY" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -982,8 +1026,8 @@
             <span class="tag tag-config">Config 2026</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-code-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-code-layers" data-title="Code Layers" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-code-layers"></span>
+          <button class="fav-btn" data-id="new-code-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Code Layers</h3>
@@ -1012,16 +1056,16 @@
             <span class="tag tag-config">Config 2025</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-make" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-make" data-title="Figma Make" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-make"></span>
+          <button class="fav-btn" data-id="new-make" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Figma Make</h3>
         <p class="desc">Генерация рабочего прототипа с реальной логикой и данными по текстовому описанию или дизайну — переход от «картинки» к кликабельному мини-приложению.</p>
         <p class="impact"><b>Импакт</b>Гипотезу можно проверить на функциональном прототипе за минуты, а не ждать спринт разработки на PoC.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rMMOqOACF1c" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Make+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rMMOqOACF1c" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1032,16 +1076,16 @@
             <span class="tag">AI / Dev</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-mcp-server" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-mcp-server" data-title="Dev Mode MCP Server" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-mcp-server"></span>
+          <button class="fav-btn" data-id="new-mcp-server" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Dev Mode MCP Server</h3>
         <p class="desc">Сервер, через который AI-агенты (Claude Code, Cursor и другие) читают реальный design context — токены, структуру компонентов, разметку — прямо из открытого файла Figma.</p>
         <p class="impact"><b>Импакт</b>Код, сгенерированный AI, использует настоящие токены и структуру дизайна, а не угадывает их — дизайн-система становится источником правды для AI-кодогенерации.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7E6552xZ9tM" title="Канал: Макс Куратов">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+MCP+server+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7E6552xZ9tM" title="Канал: Макс Куратов">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1052,16 +1096,16 @@
             <span class="tag tag-config">Config 2026</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-figma-motion" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-figma-motion" data-title="Figma Motion" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-figma-motion"></span>
+          <button class="fav-btn" data-id="new-figma-motion" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Figma Motion</h3>
         <p class="desc">Полноценный таймлайн анимации внутри файла — кейфреймы, кривые изинга, spring-анимации; агент может сгенерировать первый черновик анимации по текстовому запросу.</p>
         <p class="impact"><b>Импакт</b>Моушен-дизайн переезжает из отдельных инструментов прямо в Figma и экспортируется готовым к продакшену кодом — дизайнер настраивает не механику, а смысл движения.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=T57pv7sJXuY" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Motion+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=T57pv7sJXuY" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1072,16 +1116,16 @@
             <span class="tag tag-config">Config 2026</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-shader-effects" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-shader-effects" data-title="AI-шейдеры и эффекты" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-shader-effects"></span>
+          <button class="fav-btn" data-id="new-shader-effects" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>AI-шейдеры и эффекты</h3>
         <p class="desc">Кастомные визуальные эффекты и заливки на базе WebGPU, которые генерируются промптом агенту, а затем переиспользуются как обычный стиль в других файлах.</p>
         <p class="impact"><b>Импакт</b>Сложные визуальные эффекты для лендингов и промо больше не требуют навыков шейдер-программирования — но решение, где эффект уместен и не превращается в визуальный шум, всё равно на дизайнере.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=BE6lSuNwzN0" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+shader+effects+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=BE6lSuNwzN0" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1092,16 +1136,16 @@
             <span class="tag tag-config">Config 2026</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-weave" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-weave" data-title="Weave на канвасе" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-weave"></span>
+          <button class="fav-btn" data-id="new-weave" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Weave на канвасе</h3>
         <p class="desc">Замена фона, композитинг логотипов, смена соотношения сторон и генерация изображений — раньше отдельные инструменты, теперь встроены прямо в канвас с готовой AI-логикой промптинга.</p>
         <p class="impact"><b>Импакт</b>Рутинная работа с изображениями (вырезать фон, подогнать формат под баннер) занимает секунды прямо в файле — время освобождается для оценки результата, а не производства.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=YzymaYJmiLM" title="Канал: Говорит Дизайнер">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Weave+canvas+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=YzymaYJmiLM" title="Канал: Говорит Дизайнер">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1112,16 +1156,16 @@
             <span class="tag tag-config">Config 2026</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-generative-plugins" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-generative-plugins" data-title="Генеративные плагины" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-generative-plugins"></span>
+          <button class="fav-btn" data-id="new-generative-plugins" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Генеративные плагины</h3>
         <p class="desc">Дизайнер описывает словами рутинную операцию (пересортировать слои, привести отступы к сетке, найти и заменить цвет) — агент собирает из этого переиспользуемый плагин без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Командные конвенции соблюдаются автоматически — «стандарт следит сам за собой», а дизайнер тратит внимание на исключения, где действительно нужна оценка человека.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=IsJ1i89Ij1E" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+generative+plugins+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=IsJ1i89Ij1E" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1132,16 +1176,16 @@
             <span class="tag tag-config">Config 2026</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-figma-agent" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-figma-agent" data-title="Расширенный Figma Agent" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-figma-agent"></span>
+          <button class="fav-btn" data-id="new-figma-agent" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Расширенный Figma Agent</h3>
         <p class="desc">Агент получил кастомные переиспользуемые «навыки» из рабочих процессов команды, подключение внешних сервисов через MCP (Notion, GitHub, Excel), веб-поиск и живые данные, а также вышел за пределы дизайн-файлов — в FigJam и Figma Slides.</p>
         <p class="impact"><b>Импакт</b>Решения команды и её процессы превращаются в исполняемый навык, а не остаются в чьей-то голове или личной переписке — агент одинаково полезен на этапе брейншторма, дизайна и презентации результата.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SYoZ4bN6C8U" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Agent+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SYoZ4bN6C8U" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1152,16 +1196,16 @@
             <span class="tag">AI</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-first-draft" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-first-draft" data-title="First Draft" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-first-draft"></span>
+          <button class="fav-btn" data-id="new-first-draft" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>First Draft</h3>
         <p class="desc">Текстовый промпт превращается в полностью редактируемый макет за минуты — слои, компоненты и структура, а не картинка.</p>
         <p class="impact"><b>Импакт</b>Первая версия экрана для обсуждения появляется за минуты, а не за день, — черновик для дискуссии с командой, а не финальный дизайн.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=xmsr_gU5FCA" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+First+Draft+AI+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=xmsr_gU5FCA" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1172,16 +1216,16 @@
             <span class="tag">AI</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-rename-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-rename-layers" data-title="AI-переименование слоёв" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-rename-layers"></span>
+          <button class="fav-btn" data-id="new-rename-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>AI-переименование слоёв</h3>
         <p class="desc">AI смотрит на содержимое слоя, его окружение и связь с соседними слоями и предлагает осмысленное имя — «hero-section», «nav-link», «product-card-title» — вместо «Frame 482».</p>
         <p class="impact"><b>Импакт</b>Файл остаётся читаемым для команды и для Dev Mode без ручной дисциплины по нейминегу — особенно ценно на больших файлах и в передаче между дизайнерами.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cdwoLLwblnk" title="Канал: Сообщество душнил">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+rename+layers+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cdwoLLwblnk" title="Канал: Сообщество душнил">🇷🇺 Разбор на русском</a>
         </div>
       </article>
 
@@ -1192,16 +1236,16 @@
             <span class="tag">AI</span>
           </div>
           <div class="card-top-right">
-          <button class="fav-btn" data-id="new-visual-search" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           <button class="note-btn" data-id="new-visual-search" data-title="Visual Search" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-visual-search"></span>
+          <button class="fav-btn" data-id="new-visual-search" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
           </div>
         </div>
         <h3>Visual Search</h3>
         <p class="desc">Загружаете изображение — Figma находит похожие или совпадающие элементы в файлах и библиотеках команды по визуальному сходству, а не по названию слоя.</p>
         <p class="impact"><b>Импакт</b>Поиск нужной иконки, иллюстрации или готового паттерна занимает секунды — не нужно помнить, как что называется в библиотеке.</p>
         <div class="card-actions">
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byrx2Reng6I" title="Канал: Evgen Marfel">🇷🇺 Разбор на русском</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Visual+Search+AI+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
-          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byrx2Reng6I" title="Канал: Evgen Marfel">🇷🇺 Разбор на русском</a>
         </div>
       </article>
     </div>
@@ -1328,7 +1372,8 @@
     countEl.textContent = done;
     fillEl.style.width = (checkboxes.length ? (done / checkboxes.length * 100) : 0) + '%';
   }
-  var progressHintEl = document.getElementById('progress-hint');
+  var hintThesisEl = document.getElementById('hint-thesis');
+  var hintFullEl = document.getElementById('hint-full');
   var AI_SOURCE_LINK = '<a href="https://www.figma.com/blog/figma-2025-ai-report-perspectives/" target="_blank" rel="noopener">опрос Figma, 2500 дизайнеров и разработчиков, апрель 2025</a>';
   function updateProgressHint() {
     var aiCards = document.querySelectorAll('.card[data-ai="true"]');
@@ -1338,17 +1383,22 @@
       if (card.querySelector('.done-check').checked) aiDone++;
     });
     var ratio = aiTotal ? aiDone / aiTotal : 0;
-    var verdict;
+    var thesis, verdict;
     if (aiDone === 0) {
+      thesis = 'По AI пока как у большинства дизайнеров — 0 из ' + aiTotal;
       verdict = 'у большинства дизайнеров AI пока тоже не в основной работе — по опросу Figma, это лишь 31% опрошенных.';
     } else if (ratio <= 0.3) {
+      thesis = 'AI-любопытство: ' + aiDone + ' из ' + aiTotal + ' — как у 72% дизайнеров';
       verdict = 'это уровень любопытства, как у 72% дизайнеров, пробовавших генеративный AI — но до «AI в основной работе» (31% опрошенных) ещё есть куда расти.';
     } else if (ratio <= 0.6) {
+      thesis = aiDone + ' из ' + aiTotal + ' — уровень «AI в основной работе» (31%)';
       verdict = 'это уже уровень тех 31% дизайнеров, которые встроили AI в основную часть работы.';
     } else {
+      thesis = aiDone + ' из ' + aiTotal + ' — вы среди лидеров по AI (топ-20%)';
       verdict = 'это выше, чем у большинства опрошенных — в диапазоне тех 20% дизайнеров, у кого AI управляет большинством проектов.';
     }
-    progressHintEl.innerHTML = 'По AI-фичам: ' + aiDone + ' из ' + aiTotal + ' — ' + verdict +
+    hintThesisEl.textContent = thesis;
+    hintFullEl.innerHTML = 'По AI-фичам: ' + aiDone + ' из ' + aiTotal + ' — ' + verdict +
       ' Для контекста: у Figma ~13 млн активных пользователей в месяц, из них дизайнеров — примерно треть. Источник: ' + AI_SOURCE_LINK + '.';
   }
   function applyCardState(checkbox) {
@@ -1401,10 +1451,21 @@
     progressTrigger.classList.toggle('open');
     progressDropdown.classList.toggle('open');
   });
+  var hintTrigger = document.getElementById('hint-trigger');
+  var hintDropdown = document.getElementById('hint-dropdown');
+  hintTrigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    hintTrigger.classList.toggle('open');
+    hintDropdown.classList.toggle('open');
+  });
   document.addEventListener('click', function (e) {
     if (!progressDropdown.contains(e.target) && e.target !== progressTrigger) {
       progressTrigger.classList.remove('open');
       progressDropdown.classList.remove('open');
+    }
+    if (!hintDropdown.contains(e.target) && e.target !== hintTrigger && !hintTrigger.contains(e.target)) {
+      hintTrigger.classList.remove('open');
+      hintDropdown.classList.remove('open');
     }
   });
 
