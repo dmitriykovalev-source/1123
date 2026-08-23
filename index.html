@@ -170,6 +170,15 @@
     border-color: var(--accent);
     color: #fff;
   }
+  .tab-favorites {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tab-favorites svg {
+    fill: currentColor;
+    flex-shrink: 0;
+  }
   .fav-count {
     display: inline-block;
     min-width: 18px;
@@ -250,8 +259,8 @@
     stroke-width: 1.8;
     stroke-linejoin: round;
   }
-  .fav-btn:hover { color: var(--accent); transform: scale(1.1); }
-  .fav-btn.is-fav { color: var(--accent); }
+  .fav-btn:hover { color: #f5b429; transform: scale(1.1); }
+  .fav-btn.is-fav { color: #f5b429; }
   .fav-btn.is-fav svg { fill: currentColor; }
   .done-check {
     width: 20px;
@@ -363,7 +372,10 @@
     <button data-filter="core">Важные</button>
     <button data-filter="new">Новое с 2024</button>
     <button data-filter="ai">AI</button>
-    <button data-filter="favorites">🔖 Избранное <span class="fav-count" id="fav-count">0</span></button>
+    <button data-filter="favorites" class="tab-favorites">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg>
+      Избранное <span class="fav-count" id="fav-count">0</span>
+    </button>
   </div>
 </nav>
 
