@@ -262,6 +262,15 @@
     border-color: var(--accent);
     color: #fff;
   }
+  nav.filters .row button.tab-done {
+    order: 10;
+    opacity: .5;
+    border-style: dashed;
+    color: var(--text-dim);
+  }
+  nav.filters .row button.tab-done.active {
+    opacity: 1;
+  }
   .tab-favorites {
     display: inline-flex;
     align-items: center;
@@ -287,6 +296,99 @@
   nav.filters button.active .fav-count {
     background: rgba(255,255,255,.25);
     color: #fff;
+  }
+
+  .video-banner {
+    display: flex;
+    align-items: stretch;
+    gap: 28px;
+    margin: 40px 0 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .video-banner:hover {
+    border-color: var(--accent);
+  }
+  .video-banner-media {
+    position: relative;
+    flex: 0 0 380px;
+    display: block;
+    background: #000;
+  }
+  .video-banner-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .video-banner-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-banner-play svg {
+    background: rgba(0,0,0,.55);
+    border-radius: 50%;
+    padding: 16px;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .video-banner:hover .video-banner-play svg {
+    background: var(--accent);
+    transform: scale(1.08);
+  }
+  .video-banner-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+    padding: 28px 28px 28px 0;
+  }
+  .video-banner-body .tag {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .video-banner-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .video-banner-desc {
+    color: var(--text-dim);
+    font-size: 14.5px;
+    max-width: 640px;
+  }
+  .video-banner-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  @media (max-width: 720px) {
+    .video-banner { flex-direction: column; }
+    .video-banner-media { flex-basis: auto; aspect-ratio: 16 / 9; }
+    .video-banner-body { padding: 20px; }
   }
 
   section.group { padding: 56px 0 16px; }
@@ -465,7 +567,6 @@
   .card .impact b {
     display: block;
     font-size: 12px;
-    font-style: normal;
     text-transform: uppercase;
     letter-spacing: .04em;
     color: var(--text-dim);
@@ -736,6 +837,24 @@
 </nav>
 
 <div class="wrap">
+
+  <a class="video-banner" href="https://www.youtube.com/watch?v=2ZCc4k_IV5w" target="_blank" rel="noopener">
+    <span class="video-banner-media">
+      <img src="https://img.youtube.com/vi/2ZCc4k_IV5w/maxresdefault.jpg" alt="" loading="lazy" />
+      <span class="video-banner-play" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="#fff"/></svg>
+      </span>
+    </span>
+    <span class="video-banner-body">
+      <span class="tag tag-config">Config 2026 · Кинойт</span>
+      <span class="video-banner-title">Figma 2026: главный кинойт Config</span>
+      <span class="video-banner-desc">Дилан Филд (CEO Figma) за один час проходится по всем крупным анонсам года — новые инструменты дизайна, расширенный AI-агент, Figma Sites, Code Layers и другие фичи, которые разобраны в подборке ниже.</span>
+      <span class="video-banner-cta">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Смотреть презентацию
+      </span>
+    </span>
+  </a>
 
   <section class="group" data-group="core">
     <h2>Важные фичи</h2>
@@ -1072,25 +1191,6 @@
         <p class="impact"><b>Импакт</b>Хэндофф перестаёт быть передачей «картинки» разработчику — дизайнер работает с реальными состояниями и структурой компонентов внутри самого файла, а не с их имитацией.</p>
         <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Code+Layers+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">YouTube (Eng)</a>
-        </div>
-      </article>
-
-      <article class="card new">
-        <div class="card-top">
-          <div class="card-top-left">
-            <input type="checkbox" class="done-check" data-id="new-config-2026" aria-label="Отметить фичу как изученную" />
-            <span class="tag tag-config">Config 2026</span>
-          </div>
-          <div class="card-top-right">
-          <button class="note-btn" data-id="new-config-2026" data-title="Figma 2026" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><span class="note-count" data-id="new-config-2026"></span>
-          <button class="fav-btn" data-id="new-config-2026" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
-          </div>
-        </div>
-        <h3>Figma 2026</h3>
-        <p class="desc">Главный кинойт Config 2026 от Дилана Филда (CEO Figma) — за один час собраны все ключевые анонсы года: новые инструменты дизайна, AI-агент, Figma Sites и другие крупные фичи.</p>
-        <p class="impact"><b>Импакт</b>Быстрее увидеть картину целиком и приоритеты Figma на год, чем собирать её по отдельным роликам и постам — и решить, какие фичи из подборки изучать в первую очередь.</p>
-        <div class="card-actions">
-        <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=2ZCc4k_IV5w">Презентация</a>
         </div>
       </article>
 
@@ -1477,6 +1577,8 @@
       var allDone = boxes.length > 0 && Array.prototype.every.call(boxes, function (cb) { return cb.checked; });
       if (!allDone) g.classList.remove('force-open');
       g.classList.toggle('all-done', allDone);
+      var tabBtn = document.querySelector('nav.filters .row button[data-filter="' + g.getAttribute('data-group') + '"]');
+      if (tabBtn) tabBtn.classList.toggle('tab-done', allDone);
     });
   }
   document.querySelectorAll('.section-toggle').forEach(function (btn) {
