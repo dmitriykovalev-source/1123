@@ -311,9 +311,11 @@
     transition: background .2s ease, border-color .2s ease;
   }
   .card.done {
-    background: var(--done-bg);
-    border-color: var(--done-border);
+    background: var(--bg-card);
+    border-color: var(--border);
+    opacity: .5;
   }
+  .card.done:hover { opacity: 1; }
   .card-top {
     display: flex;
     align-items: center;
@@ -400,18 +402,14 @@
     color: var(--text-dim);
     border: 1px solid var(--border);
   }
-  .card.done .tag {
-    background: var(--done-border);
-    color: var(--done-accent);
-  }
   .card h3 {
     margin: 0;
     font-size: 19px;
   }
   .card.done h3 {
-    color: var(--done-accent);
+    color: var(--text);
     text-decoration: line-through;
-    text-decoration-color: var(--done-border);
+    text-decoration-color: var(--text-dim);
   }
   .card .desc {
     color: var(--text-dim);
@@ -444,28 +442,27 @@
     gap: 8px;
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
-    background: #16161a;
+    color: var(--text);
+    background: var(--tag-bg);
     text-decoration: none;
     padding: 10px 14px;
-    border: 1px solid #16161a;
+    border: 1px solid transparent;
     border-radius: 10px;
     transition: all .15s ease;
   }
   .card a.yt:hover {
-    background: #000;
-    border-color: #000;
+    background: var(--tag-bg);
+    border-color: var(--accent);
   }
   .card a.yt svg { flex-shrink: 0; }
   .card a.yt.yt-ru {
-    background: var(--tag-bg);
-    color: var(--text);
-    border-color: transparent;
+    background: #16161a;
+    color: #fff;
+    border-color: #16161a;
   }
   .card a.yt.yt-ru:hover {
-    background: var(--tag-bg);
-    border-color: var(--accent);
-    color: var(--text);
+    background: #000;
+    border-color: #000;
   }
 
   .notes-backdrop {
@@ -701,7 +698,7 @@
         <p class="desc">Контейнеры сами пересчитывают размеры, отступы и позиции дочерних элементов при изменении контента — как flexbox в CSS, но визуально, без кода.</p>
         <p class="impact"><b>Импакт</b>Макет не «ломается» при длинном имени, другом языке или новом элементе — не нужно вручную двигать слои после каждой правки контента.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kg0XA0MPZ0w" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kg0XA0MPZ0w" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Auto+Layout+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -721,7 +718,7 @@
         <p class="desc">Один компонент с набором вариаций (размер, состояние, тема), которые переключаются как свойства, а не хранятся отдельными слоями.</p>
         <p class="impact"><b>Импакт</b>Правка в главном компоненте моментально расходится по всем инстансам в проекте — обновление кнопки во всём файле занимает секунды, а не часы.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=UUJdwx_Jd74" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=UUJdwx_Jd74" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+components+and+variants+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -741,7 +738,7 @@
         <p class="desc">Свойства компонента (instance swap, boolean, текст, вложенные инстансы), которые можно менять прямо в панели, не залезая в структуру слоёв.</p>
         <p class="impact"><b>Импакт</b>Библиотека не «взрывается» от количества вариантов — одна карточка обслуживает десятки конфигураций через простые переключатели.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ooNE7rcd8Ig" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ooNE7rcd8Ig" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+component+properties+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -761,7 +758,7 @@
         <p class="desc">Правила «прилипания» слоя к краям и центру рамки при её растягивании — база адаптивности там, где Auto Layout избыточен.</p>
         <p class="impact"><b>Импакт</b>Один макет проверяется на разных размерах экрана растягиванием фрейма, а не рисованием версии под каждый брейкпоинт.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3jnvH9gSskA" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3jnvH9gSskA" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+constraints+responsive+resize+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -781,7 +778,7 @@
         <p class="desc">Связки экранов с переходами, модалками, оверлеями и плавной анимацией между состояниями без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Прототип, максимально близкий к реальному продукту, можно протестировать на пользователях и показать команде до старта разработки.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ygkAJM4wl2M" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ygkAJM4wl2M" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+prototyping+smart+animate+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -801,7 +798,7 @@
         <p class="desc">Именованные наборы значений (цвет, типографика, тени), на которые ссылаются слои по всему файлу и библиотекам.</p>
         <p class="impact"><b>Импакт</b>Ребрендинг или смена акцентного цвета — это правка одного стиля, а не поиск всех использований вручную по слоям.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=RL7oPauQRSw" title="Канал: предположительно Alexey Bychkov">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=RL7oPauQRSw" title="Канал: предположительно Alexey Bychkov">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+styles+color+text+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -821,7 +818,7 @@
         <p class="desc">Union, Subtract, Intersect, Exclude для сложных форм плюс полноценный vector network editor для точной работы с точками и кривыми.</p>
         <p class="impact"><b>Импакт</b>Иконки, пиктограммы и кастомные иллюстрации собираются прямо в Figma — не нужно переключаться в Illustrator для базовой векторной работы.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hTIPRersKq4" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hTIPRersKq4" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+boolean+operations+vector+editing+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -841,7 +838,7 @@
         <p class="desc">Полный снепшот файла на любой момент времени плюс возможность отвести отдельную «ветку» для рискованных экспериментов.</p>
         <p class="impact"><b>Импакт</b>Можно смело переделывать флоу или дизайн-систему, зная, что в любой момент есть откат к рабочей версии — без страха «всё сломать».</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KIaTNIMFQNE" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KIaTNIMFQNE" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+version+history+branching+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -872,7 +869,7 @@
         <p class="desc">Отдельный режим для разработчиков: авто-генерация CSS/iOS/Android-сниппетов, инспектор токенов и переменных, аннотации и готовые к копированию значения.</p>
         <p class="impact"><b>Импакт</b>Дизайнер перестаёт быть «переводчиком» макета в спеку — разработчик сам читает точные значения и меньше расходится с макетом в вёрстке.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Ifj8nbwJoRo" title="Канал: MaxGraph - сайты как страсть">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Ifj8nbwJoRo" title="Канал: MaxGraph - сайты как страсть">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+tutorial+2024+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -892,7 +889,7 @@
         <p class="desc">Переменные для цвета, чисел, строк и boolean, собранные в коллекции с режимами (light/dark, density, brand), которые переключаются одним свойством.</p>
         <p class="impact"><b>Импакт</b>Один файл поддерживает light/dark и несколько брендов без дублирования экранов — дизайн-система становится настоящими токенами, а не картинками.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3lfpe-L9QdY" title="Канал: Disarto">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3lfpe-L9QdY" title="Канал: Disarto">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+variables+modes+theming+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -912,7 +909,7 @@
         <p class="desc">If/else-логика, математические выражения и работа с переменными внутри прототипа — счётчики, тумблеры, простая валидация форм.</p>
         <p class="impact"><b>Импакт</b>Прототип с реальным поведением (не просто «клик — переход») можно тестировать на пользователях без единой строчки кода и без разработчика.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=be0qXMxn1OE" title="Канал: Nexfield Academy">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=be0qXMxn1OE" title="Канал: Nexfield Academy">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+conditional+logic+expressions+prototype+variables+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -932,7 +929,7 @@
         <p class="desc">Настоящая сетка (строки и колонки) внутри Auto Layout-контейнера — аналог CSS Grid, а не имитация через вложенные фреймы.</p>
         <p class="impact"><b>Импакт</b>Дашборды, галереи и карточные сетки собираются без десятков вложенных auto-layout фреймов «для симуляции grid».</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Wf_Kj1lv_3k" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Wf_Kj1lv_3k" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+grid+auto+layout+2024+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -971,7 +968,7 @@
         <p class="desc">Публикация сайта прямо из дизайн-файла — с реальным поведением (адаптивность, анимации, формы), без передачи макета в отдельный конструктор или разработку.</p>
         <p class="impact"><b>Импакт</b>Лендинги, промо-страницы и маркетинговые сайты дизайнер доводит от макета до продакшена самостоятельно, минуя цикл разработки.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KmGbVoYMNfc" title="Канал: Даниил Шишко x Pixel Perfect">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KmGbVoYMNfc" title="Канал: Даниил Шишко x Pixel Perfect">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Sites+tutorial+2025+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -992,7 +989,7 @@
         <p class="desc">Инструмент для быстрой сборки брендированного маркетингового контента по шаблонам, которые задаёт дизайнер, — для соцсетей, баннеров, промо-материалов.</p>
         <p class="impact"><b>Импакт</b>Маркетинг и другие команды сами собирают контент в рамках бренд-гайда, а дизайнер один раз настраивает шаблон вместо ручного производства каждого баннера.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=vILyX-9KYvY" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=vILyX-9KYvY" title="Канал: Study Kvo">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Buzz+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1043,7 +1040,7 @@
         <p class="desc">Генерация рабочего прототипа с реальной логикой и данными по текстовому описанию или дизайну — переход от «картинки» к кликабельному мини-приложению.</p>
         <p class="impact"><b>Импакт</b>Гипотезу можно проверить на функциональном прототипе за минуты, а не ждать спринт разработки на PoC.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rMMOqOACF1c" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rMMOqOACF1c" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Make+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1063,7 +1060,7 @@
         <p class="desc">Сервер, через который AI-агенты (Claude Code, Cursor и другие) читают реальный design context — токены, структуру компонентов, разметку — прямо из открытого файла Figma.</p>
         <p class="impact"><b>Импакт</b>Код, сгенерированный AI, использует настоящие токены и структуру дизайна, а не угадывает их — дизайн-система становится источником правды для AI-кодогенерации.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7E6552xZ9tM" title="Канал: Макс Куратов">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7E6552xZ9tM" title="Канал: Макс Куратов">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+MCP+server+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1083,7 +1080,7 @@
         <p class="desc">Полноценный таймлайн анимации внутри файла — кейфреймы, кривые изинга, spring-анимации; агент может сгенерировать первый черновик анимации по текстовому запросу.</p>
         <p class="impact"><b>Импакт</b>Моушен-дизайн переезжает из отдельных инструментов прямо в Figma и экспортируется готовым к продакшену кодом — дизайнер настраивает не механику, а смысл движения.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=T57pv7sJXuY" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=T57pv7sJXuY" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Motion+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1103,7 +1100,7 @@
         <p class="desc">Кастомные визуальные эффекты и заливки на базе WebGPU, которые генерируются промптом агенту, а затем переиспользуются как обычный стиль в других файлах.</p>
         <p class="impact"><b>Импакт</b>Сложные визуальные эффекты для лендингов и промо больше не требуют навыков шейдер-программирования — но решение, где эффект уместен и не превращается в визуальный шум, всё равно на дизайнере.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=BE6lSuNwzN0" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=BE6lSuNwzN0" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+shader+effects+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1123,7 +1120,7 @@
         <p class="desc">Замена фона, композитинг логотипов, смена соотношения сторон и генерация изображений — раньше отдельные инструменты, теперь встроены прямо в канвас с готовой AI-логикой промптинга.</p>
         <p class="impact"><b>Импакт</b>Рутинная работа с изображениями (вырезать фон, подогнать формат под баннер) занимает секунды прямо в файле — время освобождается для оценки результата, а не производства.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=YzymaYJmiLM" title="Канал: Говорит Дизайнер">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=YzymaYJmiLM" title="Канал: Говорит Дизайнер">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Weave+canvas+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1143,7 +1140,7 @@
         <p class="desc">Дизайнер описывает словами рутинную операцию (пересортировать слои, привести отступы к сетке, найти и заменить цвет) — агент собирает из этого переиспользуемый плагин без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Командные конвенции соблюдаются автоматически — «стандарт следит сам за собой», а дизайнер тратит внимание на исключения, где действительно нужна оценка человека.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=IsJ1i89Ij1E" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=IsJ1i89Ij1E" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+generative+plugins+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1163,7 +1160,7 @@
         <p class="desc">Агент получил кастомные переиспользуемые «навыки» из рабочих процессов команды, подключение внешних сервисов через MCP (Notion, GitHub, Excel), веб-поиск и живые данные, а также вышел за пределы дизайн-файлов — в FigJam и Figma Slides.</p>
         <p class="impact"><b>Импакт</b>Решения команды и её процессы превращаются в исполняемый навык, а не остаются в чьей-то голове или личной переписке — агент одинаково полезен на этапе брейншторма, дизайна и презентации результата.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SYoZ4bN6C8U" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SYoZ4bN6C8U" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Agent+Config+2026+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1183,7 +1180,7 @@
         <p class="desc">Текстовый промпт превращается в полностью редактируемый макет за минуты — слои, компоненты и структура, а не картинка.</p>
         <p class="impact"><b>Импакт</b>Первая версия экрана для обсуждения появляется за минуты, а не за день, — черновик для дискуссии с командой, а не финальный дизайн.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=xmsr_gU5FCA" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=xmsr_gU5FCA" title="Канал: Study Kvo">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+First+Draft+AI+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1203,7 +1200,7 @@
         <p class="desc">AI смотрит на содержимое слоя, его окружение и связь с соседними слоями и предлагает осмысленное имя — «hero-section», «nav-link», «product-card-title» — вместо «Frame 482».</p>
         <p class="impact"><b>Импакт</b>Файл остаётся читаемым для команды и для Dev Mode без ручной дисциплины по нейминегу — особенно ценно на больших файлах и в передаче между дизайнерами.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cdwoLLwblnk" title="Канал: Сообщество душнил">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cdwoLLwblnk" title="Канал: Сообщество душнил">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+rename+layers+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
@@ -1223,7 +1220,7 @@
         <p class="desc">Загружаете изображение — Figma находит похожие или совпадающие элементы в файлах и библиотеках команды по визуальному сходству, а не по названию слоя.</p>
         <p class="impact"><b>Импакт</b>Поиск нужной иконки, иллюстрации или готового паттерна занимает секунды — не нужно помнить, как что называется в библиотеке.</p>
         <div class="card-actions">
-        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byrx2Reng6I" title="Канал: Evgen Marfel">🇷🇺 Разбор на русском</a>
+        <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byrx2Reng6I" title="Канал: Evgen Marfel">Смотреть YouTube (Рус)</a>
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Visual+Search+AI+%D0%BD%D0%B0+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%BC">▶ Смотреть на YouTube</a>
         </div>
       </article>
