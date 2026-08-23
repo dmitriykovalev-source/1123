@@ -236,15 +236,23 @@
     background: none;
     padding: 0;
     margin: 0;
-    font-size: 20px;
-    line-height: 1;
-    color: var(--border);
+    display: inline-flex;
+    color: var(--text-dim);
     cursor: pointer;
     flex-shrink: 0;
     transition: color .15s ease, transform .1s ease;
   }
-  .fav-btn:hover { color: #f5b429; transform: scale(1.1); }
-  .fav-btn.is-fav { color: #f5b429; }
+  .fav-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+  .fav-btn:hover { color: var(--accent); transform: scale(1.1); }
+  .fav-btn.is-fav { color: var(--accent); }
+  .fav-btn.is-fav svg { fill: currentColor; }
   .done-check {
     width: 20px;
     height: 20px;
@@ -355,7 +363,7 @@
     <button data-filter="core">Важные</button>
     <button data-filter="new">Новое с 2024</button>
     <button data-filter="ai">AI</button>
-    <button data-filter="favorites">★ Избранное <span class="fav-count" id="fav-count">0</span></button>
+    <button data-filter="favorites">🔖 Избранное <span class="fav-count" id="fav-count">0</span></button>
   </div>
 </nav>
 
@@ -372,7 +380,7 @@
             <input type="checkbox" class="done-check" data-id="core-auto-layout" aria-label="Отметить фичу как изученную" />
             <span class="tag">Layout</span>
           </div>
-          <button class="fav-btn" data-id="core-auto-layout" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-auto-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Auto Layout</h3>
         <p class="desc">Контейнеры сами пересчитывают размеры, отступы и позиции дочерних элементов при изменении контента — как flexbox в CSS, но визуально, без кода.</p>
@@ -386,7 +394,7 @@
             <input type="checkbox" class="done-check" data-id="core-variants" aria-label="Отметить фичу как изученную" />
             <span class="tag">Components</span>
           </div>
-          <button class="fav-btn" data-id="core-variants" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-variants" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Компоненты и варианты (Variants)</h3>
         <p class="desc">Один компонент с набором вариаций (размер, состояние, тема), которые переключаются как свойства, а не хранятся отдельными слоями.</p>
@@ -400,7 +408,7 @@
             <input type="checkbox" class="done-check" data-id="core-component-properties" aria-label="Отметить фичу как изученную" />
             <span class="tag">Components</span>
           </div>
-          <button class="fav-btn" data-id="core-component-properties" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-component-properties" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Component Properties</h3>
         <p class="desc">Свойства компонента (instance swap, boolean, текст, вложенные инстансы), которые можно менять прямо в панели, не залезая в структуру слоёв.</p>
@@ -414,7 +422,7 @@
             <input type="checkbox" class="done-check" data-id="core-constraints" aria-label="Отметить фичу как изученную" />
             <span class="tag">Layout</span>
           </div>
-          <button class="fav-btn" data-id="core-constraints" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-constraints" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Constraints и адаптивный resize</h3>
         <p class="desc">Правила «прилипания» слоя к краям и центру рамки при её растягивании — база адаптивности там, где Auto Layout избыточен.</p>
@@ -428,7 +436,7 @@
             <input type="checkbox" class="done-check" data-id="core-prototyping" aria-label="Отметить фичу как изученную" />
             <span class="tag">Prototyping</span>
           </div>
-          <button class="fav-btn" data-id="core-prototyping" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-prototyping" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Интерактивные прототипы (overlays, Smart Animate)</h3>
         <p class="desc">Связки экранов с переходами, модалками, оверлеями и плавной анимацией между состояниями без единой строчки кода.</p>
@@ -442,7 +450,7 @@
             <input type="checkbox" class="done-check" data-id="core-styles" aria-label="Отметить фичу как изученную" />
             <span class="tag">System</span>
           </div>
-          <button class="fav-btn" data-id="core-styles" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-styles" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Локальные стили (цвет, текст, эффекты)</h3>
         <p class="desc">Именованные наборы значений (цвет, типографика, тени), на которые ссылаются слои по всему файлу и библиотекам.</p>
@@ -456,7 +464,7 @@
             <input type="checkbox" class="done-check" data-id="core-boolean" aria-label="Отметить фичу как изученную" />
             <span class="tag">Vector</span>
           </div>
-          <button class="fav-btn" data-id="core-boolean" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-boolean" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Boolean Operations и векторное редактирование</h3>
         <p class="desc">Union, Subtract, Intersect, Exclude для сложных форм плюс полноценный vector network editor для точной работы с точками и кривыми.</p>
@@ -470,7 +478,7 @@
             <input type="checkbox" class="done-check" data-id="core-version-history" aria-label="Отметить фичу как изученную" />
             <span class="tag">Workflow</span>
           </div>
-          <button class="fav-btn" data-id="core-version-history" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="core-version-history" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>История версий и ветки (Branching)</h3>
         <p class="desc">Полный снепшот файла на любой момент времени плюс возможность отвести отдельную «ветку» для рискованных экспериментов.</p>
@@ -492,7 +500,7 @@
             <input type="checkbox" class="done-check" data-id="new-dev-mode" aria-label="Отметить фичу как изученную" />
             <span class="tag">Dev Handoff</span>
           </div>
-          <button class="fav-btn" data-id="new-dev-mode" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-dev-mode" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Dev Mode</h3>
         <p class="desc">Отдельный режим для разработчиков: авто-генерация CSS/iOS/Android-сниппетов, инспектор токенов и переменных, аннотации и готовые к копированию значения.</p>
@@ -506,7 +514,7 @@
             <input type="checkbox" class="done-check" data-id="new-variables" aria-label="Отметить фичу как изученную" />
             <span class="tag">Tokens</span>
           </div>
-          <button class="fav-btn" data-id="new-variables" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-variables" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Variables и Modes (темизация)</h3>
         <p class="desc">Переменные для цвета, чисел, строк и boolean, собранные в коллекции с режимами (light/dark, density, brand), которые переключаются одним свойством.</p>
@@ -520,7 +528,7 @@
             <input type="checkbox" class="done-check" data-id="new-conditional-logic" aria-label="Отметить фичу как изученную" />
             <span class="tag">Prototyping</span>
           </div>
-          <button class="fav-btn" data-id="new-conditional-logic" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-conditional-logic" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Условная логика и выражения в прототипах</h3>
         <p class="desc">If/else-логика, математические выражения и работа с переменными внутри прототипа — счётчики, тумблеры, простая валидация форм.</p>
@@ -534,7 +542,7 @@
             <input type="checkbox" class="done-check" data-id="new-grid-layout" aria-label="Отметить фичу как изученную" />
             <span class="tag">Layout</span>
           </div>
-          <button class="fav-btn" data-id="new-grid-layout" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-grid-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Grid-раскладки в Auto Layout</h3>
         <p class="desc">Настоящая сетка (строки и колонки) внутри Auto Layout-контейнера — аналог CSS Grid, а не имитация через вложенные фреймы.</p>
@@ -548,7 +556,7 @@
             <input type="checkbox" class="done-check" data-id="new-code-connect" aria-label="Отметить фичу как изученную" />
             <span class="tag">Dev Handoff</span>
           </div>
-          <button class="fav-btn" data-id="new-code-connect" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-code-connect" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Code Connect</h3>
         <p class="desc">Привязка реальных компонентов кодовой базы (React, SwiftUI и др.) к компонентам в Figma — Dev Mode показывает настоящий сниппет проекта, а не сгенерированный.</p>
@@ -562,7 +570,7 @@
             <input type="checkbox" class="done-check" data-id="new-sites" aria-label="Отметить фичу как изученную" />
             <span class="tag">Publishing</span>
           </div>
-          <button class="fav-btn" data-id="new-sites" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-sites" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Figma Sites</h3>
         <p class="desc">Публикация сайта прямо из дизайн-файла — с реальным поведением (адаптивность, анимации, формы), без передачи макета в отдельный конструктор или разработку.</p>
@@ -576,7 +584,7 @@
             <input type="checkbox" class="done-check" data-id="new-make" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
-          <button class="fav-btn" data-id="new-make" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-make" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Figma Make</h3>
         <p class="desc">Генерация рабочего прототипа с реальной логикой и данными по текстовому описанию или дизайну — переход от «картинки» к кликабельному мини-приложению.</p>
@@ -590,7 +598,7 @@
             <input type="checkbox" class="done-check" data-id="new-buzz" aria-label="Отметить фичу как изученную" />
             <span class="tag">Content</span>
           </div>
-          <button class="fav-btn" data-id="new-buzz" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-buzz" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Figma Buzz</h3>
         <p class="desc">Инструмент для быстрой сборки брендированного маркетингового контента по шаблонам, которые задаёт дизайнер, — для соцсетей, баннеров, промо-материалов.</p>
@@ -604,7 +612,7 @@
             <input type="checkbox" class="done-check" data-id="new-mcp-server" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI / Dev</span>
           </div>
-          <button class="fav-btn" data-id="new-mcp-server" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-mcp-server" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Dev Mode MCP Server</h3>
         <p class="desc">Сервер, через который AI-агенты (Claude Code, Cursor и другие) читают реальный design context — токены, структуру компонентов, разметку — прямо из открытого файла Figma.</p>
@@ -618,7 +626,7 @@
             <input type="checkbox" class="done-check" data-id="new-code-layers" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
-          <button class="fav-btn" data-id="new-code-layers" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-code-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Code Layers</h3>
         <p class="desc">Новый тип слоя, в который можно подключить настоящий репозиторий (клонировать GitHub или загрузить локальный код) и переключаться между кодом и дизайном как между двумя представлениями одного и того же экрана.</p>
@@ -632,7 +640,7 @@
             <input type="checkbox" class="done-check" data-id="new-figma-motion" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
-          <button class="fav-btn" data-id="new-figma-motion" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-figma-motion" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Figma Motion</h3>
         <p class="desc">Полноценный таймлайн анимации внутри файла — кейфреймы, кривые изинга, spring-анимации; агент может сгенерировать первый черновик анимации по текстовому запросу.</p>
@@ -646,7 +654,7 @@
             <input type="checkbox" class="done-check" data-id="new-shader-effects" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
-          <button class="fav-btn" data-id="new-shader-effects" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-shader-effects" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>AI-шейдеры и эффекты</h3>
         <p class="desc">Кастомные визуальные эффекты и заливки на базе WebGPU, которые генерируются промптом агенту, а затем переиспользуются как обычный стиль в других файлах.</p>
@@ -660,7 +668,7 @@
             <input type="checkbox" class="done-check" data-id="new-weave" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
-          <button class="fav-btn" data-id="new-weave" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-weave" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Weave на канвасе</h3>
         <p class="desc">Замена фона, композитинг логотипов, смена соотношения сторон и генерация изображений — раньше отдельные инструменты, теперь встроены прямо в канвас с готовой AI-логикой промптинга.</p>
@@ -674,7 +682,7 @@
             <input type="checkbox" class="done-check" data-id="new-generative-plugins" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
-          <button class="fav-btn" data-id="new-generative-plugins" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-generative-plugins" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Генеративные плагины</h3>
         <p class="desc">Дизайнер описывает словами рутинную операцию (пересортировать слои, привести отступы к сетке, найти и заменить цвет) — агент собирает из этого переиспользуемый плагин без единой строчки кода.</p>
@@ -688,7 +696,7 @@
             <input type="checkbox" class="done-check" data-id="new-figma-agent" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
-          <button class="fav-btn" data-id="new-figma-agent" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-figma-agent" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Расширенный Figma Agent</h3>
         <p class="desc">Агент получил кастомные переиспользуемые «навыки» из рабочих процессов команды, подключение внешних сервисов через MCP (Notion, GitHub, Excel), веб-поиск и живые данные, а также вышел за пределы дизайн-файлов — в FigJam и Figma Slides.</p>
@@ -702,7 +710,7 @@
             <input type="checkbox" class="done-check" data-id="new-first-draft" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
-          <button class="fav-btn" data-id="new-first-draft" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-first-draft" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>First Draft</h3>
         <p class="desc">Текстовый промпт превращается в полностью редактируемый макет за минуты — слои, компоненты и структура, а не картинка.</p>
@@ -716,7 +724,7 @@
             <input type="checkbox" class="done-check" data-id="new-rename-layers" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
-          <button class="fav-btn" data-id="new-rename-layers" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-rename-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>AI-переименование слоёв</h3>
         <p class="desc">AI смотрит на содержимое слоя, его окружение и связь с соседними слоями и предлагает осмысленное имя — «hero-section», «nav-link», «product-card-title» — вместо «Frame 482».</p>
@@ -730,7 +738,7 @@
             <input type="checkbox" class="done-check" data-id="new-visual-search" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
-          <button class="fav-btn" data-id="new-visual-search" aria-label="Добавить в избранное" title="Добавить в избранное">☆</button>
+          <button class="fav-btn" data-id="new-visual-search" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
         </div>
         <h3>Visual Search</h3>
         <p class="desc">Загружаете изображение — Figma находит похожие или совпадающие элементы в файлах и библиотеках команды по визуальному сходству, а не по названию слоя.</p>
@@ -800,7 +808,6 @@
     var id = btn.getAttribute('data-id');
     if (favState[id]) {
       btn.classList.add('is-fav');
-      btn.textContent = '★';
     }
   });
   updateFavCount();
@@ -810,7 +817,6 @@
       var id = btn.getAttribute('data-id');
       var isFav = !btn.classList.contains('is-fav');
       btn.classList.toggle('is-fav', isFav);
-      btn.textContent = isFav ? '★' : '☆';
       var s = loadFavorites();
       s[id] = isFav;
       saveFavorites(s);
