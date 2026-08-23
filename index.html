@@ -215,6 +215,31 @@
   .hint-dropdown.open { display: block; }
   .hint-dropdown a { color: var(--text-dim); text-decoration: underline; }
   .hint-dropdown a:hover { color: var(--accent); }
+  .hint-dropdown .hint-lead {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .hint-dropdown ul {
+    margin: 0 0 10px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hint-dropdown li {
+    padding-left: 14px;
+    border-left: 2px solid var(--border);
+  }
+  .hint-dropdown li b { color: var(--text); }
+  .hint-dropdown .hint-source {
+    margin: 0;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-top: 1px dashed var(--border);
+    padding-top: 8px;
+  }
   nav.filters .row { display: flex; gap: 10px; justify-content: flex-start; flex-wrap: wrap; }
   nav.filters .row button {
     border: 1px solid var(--border);
@@ -682,7 +707,7 @@
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="hint-dropdown" id="hint-dropdown">
-        <p id="hint-full" style="margin:0;"></p>
+        <div id="hint-full"></div>
       </div>
     </div>
   </div>
@@ -1402,8 +1427,15 @@
       verdict = 'это выше, чем у большинства опрошенных — в диапазоне тех 20% дизайнеров, у кого AI управляет большинством проектов.';
     }
     hintThesisEl.textContent = thesis;
-    hintFullEl.innerHTML = 'По AI-фичам: ' + aiDone + ' из ' + aiTotal + ' — ' + verdict +
-      ' Для контекста: у Figma ~13 млн активных пользователей в месяц, из них дизайнеров — примерно треть. Источник: ' + AI_SOURCE_LINK + '.';
+    hintFullEl.innerHTML =
+      '<p class="hint-lead">По AI-фичам: ' + aiDone + ' из ' + aiTotal + ' — ' + verdict + '</p>' +
+      '<ul>' +
+        '<li>У Figma <b>~13 млн</b> активных пользователей в месяц, из них дизайнеров — примерно треть, остальные две трети — разработчики, продакты и другие роли.</li>' +
+        '<li><b>92%</b> дизайнеров и <b>91%</b> разработчиков считают, что процесс хэндоффа можно улучшить — при том что <b>84%</b> дизайнеров сотрудничают с разработчиками хотя бы раз в неделю.</li>' +
+        '<li>Лишь <b>33%</b> дизайнеров используют AI для генерации ассетов и <b>22%</b> — для первых черновиков макета.</li>' +
+        '<li><b>90%</b> дизайнеров сейчас выбирают Figma как основной инструмент — доля Sketch за то же время упала до ~4,5%.</li>' +
+      '</ul>' +
+      '<p class="hint-source">Источники: ' + AI_SOURCE_LINK + '; <a href="https://www.figma.com/reports/designer-developer-trends/" target="_blank" rel="noopener">Figma Designer-Developer Trends, 2025</a>; <a href="https://www.figma.com/resource-library/design-statistics/" target="_blank" rel="noopener">Figma Design Statistics</a>.</p>';
   }
   function applyCardState(checkbox) {
     var card = checkbox.closest('.card');
