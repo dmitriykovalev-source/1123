@@ -19,6 +19,8 @@
     --done-bg: #f1fbf4;
     --done-border: #b8e6c4;
     --done-accent: #1f9d55;
+    --panel-bg: #eef0f5;
+    --progress-gray: #c7c7d1;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -37,6 +39,8 @@
       --done-bg: #12241a;
       --done-border: #245536;
       --done-accent: #4ade80;
+      --panel-bg: #15151b;
+      --progress-gray: #4b4b57;
     }
   }
   * { box-sizing: border-box; }
@@ -151,7 +155,7 @@
     height: 100%;
     width: 0%;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--accent), var(--done-accent));
+    background: linear-gradient(90deg, var(--progress-gray), var(--done-accent));
     transition: width .25s ease;
   }
   nav.filters .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -208,10 +212,18 @@
     font-size: 15px;
   }
 
+  .grid-panel {
+    background: var(--panel-bg);
+    border-radius: 24px;
+    padding: 28px;
+  }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 20px;
+  }
+  @media (max-width: 640px) {
+    .grid-panel { padding: 16px; border-radius: 16px; }
   }
 
   .card {
@@ -262,6 +274,25 @@
   .fav-btn:hover { color: #f5b429; transform: scale(1.1); }
   .fav-btn.is-fav { color: #f5b429; }
   .fav-btn.is-fav svg { fill: currentColor; }
+  .card-top-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .note-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    color: var(--text-dim);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color .15s ease, transform .1s ease;
+  }
+  .note-btn:hover { color: var(--accent); transform: scale(1.1); }
+  .note-btn.has-notes { color: var(--accent); }
   .done-check {
     width: 20px;
     height: 20px;
@@ -313,8 +344,13 @@
     color: var(--accent);
     margin-bottom: 4px;
   }
-  .card a.yt {
+  .card-actions {
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card a.yt {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -332,6 +368,144 @@
     color: var(--accent);
   }
   .card a.yt svg { flex-shrink: 0; }
+  .card a.yt.yt-ru {
+    background: var(--tag-bg);
+    border-color: transparent;
+  }
+  .card a.yt.yt-ru:hover {
+    border-color: var(--accent);
+  }
+
+  .notes-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+    z-index: 40;
+  }
+  .notes-backdrop.open { opacity: 1; pointer-events: auto; }
+  .notes-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    max-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transform: translateY(100%);
+    transition: transform .25s ease;
+    z-index: 41;
+  }
+  .notes-sheet.open { transform: translateY(0); }
+  .notes-sheet-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .notes-sheet-header h4 {
+    margin: 0;
+    font-size: 17px;
+  }
+  .notes-sheet-header .sub {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .notes-close {
+    border: none;
+    background: var(--tag-bg);
+    color: var(--text);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .notes-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .notes-empty {
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 8px 0;
+  }
+  .notes-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .notes-item a {
+    flex: 1;
+    min-width: 0;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .notes-item a:hover { text-decoration: underline; }
+  .notes-item-delete {
+    border: none;
+    background: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 16px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .notes-item-delete:hover { color: var(--accent-2); }
+  .notes-form {
+    display: flex;
+    gap: 8px;
+  }
+  .notes-form input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+  }
+  .notes-form button {
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .notes-hint {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
 
   footer {
     margin-top: 64px;
@@ -384,6 +558,7 @@
   <section class="group" data-group="core">
     <h2>Важные фичи</h2>
     <p class="subtitle">База, без которой продуктовый дизайн в Figma превращается в ручной труд.</p>
+    <div class="grid-panel">
     <div class="grid">
 
       <article class="card core">
@@ -392,12 +567,18 @@
             <input type="checkbox" class="done-check" data-id="core-auto-layout" aria-label="Отметить фичу как изученную" />
             <span class="tag">Layout</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-auto-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-auto-layout" data-title="Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Auto Layout</h3>
         <p class="desc">Контейнеры сами пересчитывают размеры, отступы и позиции дочерних элементов при изменении контента — как flexbox в CSS, но визуально, без кода.</p>
         <p class="impact"><b>Импакт</b>Макет не «ломается» при длинном имени, другом языке или новом элементе — не нужно вручную двигать слои после каждой правки контента.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Auto+Layout+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kg0XA0MPZ0w" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -406,12 +587,18 @@
             <input type="checkbox" class="done-check" data-id="core-variants" aria-label="Отметить фичу как изученную" />
             <span class="tag">Components</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-variants" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-variants" data-title="Компоненты и варианты (Variants)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Компоненты и варианты (Variants)</h3>
         <p class="desc">Один компонент с набором вариаций (размер, состояние, тема), которые переключаются как свойства, а не хранятся отдельными слоями.</p>
         <p class="impact"><b>Импакт</b>Правка в главном компоненте моментально расходится по всем инстансам в проекте — обновление кнопки во всём файле занимает секунды, а не часы.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+components+and+variants+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=UUJdwx_Jd74" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -420,12 +607,18 @@
             <input type="checkbox" class="done-check" data-id="core-component-properties" aria-label="Отметить фичу как изученную" />
             <span class="tag">Components</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-component-properties" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-component-properties" data-title="Component Properties" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Component Properties</h3>
         <p class="desc">Свойства компонента (instance swap, boolean, текст, вложенные инстансы), которые можно менять прямо в панели, не залезая в структуру слоёв.</p>
         <p class="impact"><b>Импакт</b>Библиотека не «взрывается» от количества вариантов — одна карточка обслуживает десятки конфигураций через простые переключатели.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+component+properties+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ooNE7rcd8Ig" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -434,12 +627,18 @@
             <input type="checkbox" class="done-check" data-id="core-constraints" aria-label="Отметить фичу как изученную" />
             <span class="tag">Layout</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-constraints" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-constraints" data-title="Constraints и адаптивный resize" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Constraints и адаптивный resize</h3>
         <p class="desc">Правила «прилипания» слоя к краям и центру рамки при её растягивании — база адаптивности там, где Auto Layout избыточен.</p>
         <p class="impact"><b>Импакт</b>Один макет проверяется на разных размерах экрана растягиванием фрейма, а не рисованием версии под каждый брейкпоинт.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+constraints+responsive+resize+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3jnvH9gSskA" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -448,12 +647,18 @@
             <input type="checkbox" class="done-check" data-id="core-prototyping" aria-label="Отметить фичу как изученную" />
             <span class="tag">Prototyping</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-prototyping" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-prototyping" data-title="Интерактивные прототипы (overlays, Smart Animate)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Интерактивные прототипы (overlays, Smart Animate)</h3>
         <p class="desc">Связки экранов с переходами, модалками, оверлеями и плавной анимацией между состояниями без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Прототип, максимально близкий к реальному продукту, можно протестировать на пользователях и показать команде до старта разработки.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+prototyping+smart+animate+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ygkAJM4wl2M" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -462,12 +667,18 @@
             <input type="checkbox" class="done-check" data-id="core-styles" aria-label="Отметить фичу как изученную" />
             <span class="tag">System</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-styles" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-styles" data-title="Локальные стили (цвет, текст, эффекты)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Локальные стили (цвет, текст, эффекты)</h3>
         <p class="desc">Именованные наборы значений (цвет, типографика, тени), на которые ссылаются слои по всему файлу и библиотекам.</p>
         <p class="impact"><b>Импакт</b>Ребрендинг или смена акцентного цвета — это правка одного стиля, а не поиск всех использований вручную по слоям.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+styles+color+text+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=RL7oPauQRSw" title="Канал: предположительно Alexey Bychkov">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -476,12 +687,18 @@
             <input type="checkbox" class="done-check" data-id="core-boolean" aria-label="Отметить фичу как изученную" />
             <span class="tag">Vector</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-boolean" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-boolean" data-title="Boolean Operations и векторное редактирование" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Boolean Operations и векторное редактирование</h3>
         <p class="desc">Union, Subtract, Intersect, Exclude для сложных форм плюс полноценный vector network editor для точной работы с точками и кривыми.</p>
         <p class="impact"><b>Импакт</b>Иконки, пиктограммы и кастомные иллюстрации собираются прямо в Figma — не нужно переключаться в Illustrator для базовой векторной работы.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+boolean+operations+vector+editing+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hTIPRersKq4" title="Канал: Alexey Bychkov: веб-дизайн и фриланс">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card core">
@@ -490,20 +707,28 @@
             <input type="checkbox" class="done-check" data-id="core-version-history" aria-label="Отметить фичу как изученную" />
             <span class="tag">Workflow</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="core-version-history" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="core-version-history" data-title="История версий и ветки (Branching)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>История версий и ветки (Branching)</h3>
         <p class="desc">Полный снепшот файла на любой момент времени плюс возможность отвести отдельную «ветку» для рискованных экспериментов.</p>
         <p class="impact"><b>Импакт</b>Можно смело переделывать флоу или дизайн-систему, зная, что в любой момент есть откат к рабочей версии — без страха «всё сломать».</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+version+history+branching+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KIaTNIMFQNE" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
+    </div>
     </div>
   </section>
 
   <section class="group" data-group="new">
     <h2>Новое с 2024 года</h2>
     <p class="subtitle">Всё, что заметно поменяло рабочий процесс дизайнера за последние два года.</p>
+    <div class="grid-panel">
     <div class="grid">
 
       <article class="card new">
@@ -512,12 +737,18 @@
             <input type="checkbox" class="done-check" data-id="new-dev-mode" aria-label="Отметить фичу как изученную" />
             <span class="tag">Dev Handoff</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-dev-mode" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-dev-mode" data-title="Dev Mode" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Dev Mode</h3>
         <p class="desc">Отдельный режим для разработчиков: авто-генерация CSS/iOS/Android-сниппетов, инспектор токенов и переменных, аннотации и готовые к копированию значения.</p>
         <p class="impact"><b>Импакт</b>Дизайнер перестаёт быть «переводчиком» макета в спеку — разработчик сам читает точные значения и меньше расходится с макетом в вёрстке.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+tutorial+2024">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Ifj8nbwJoRo" title="Канал: MaxGraph - сайты как страсть">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -526,12 +757,18 @@
             <input type="checkbox" class="done-check" data-id="new-variables" aria-label="Отметить фичу как изученную" />
             <span class="tag">Tokens</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-variables" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-variables" data-title="Variables и Modes (темизация)" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Variables и Modes (темизация)</h3>
         <p class="desc">Переменные для цвета, чисел, строк и boolean, собранные в коллекции с режимами (light/dark, density, brand), которые переключаются одним свойством.</p>
         <p class="impact"><b>Импакт</b>Один файл поддерживает light/dark и несколько брендов без дублирования экранов — дизайн-система становится настоящими токенами, а не картинками.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+variables+modes+theming+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=3lfpe-L9QdY" title="Канал: Disarto">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -540,12 +777,18 @@
             <input type="checkbox" class="done-check" data-id="new-conditional-logic" aria-label="Отметить фичу как изученную" />
             <span class="tag">Prototyping</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-conditional-logic" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-conditional-logic" data-title="Условная логика и выражения в прототипах" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Условная логика и выражения в прототипах</h3>
         <p class="desc">If/else-логика, математические выражения и работа с переменными внутри прототипа — счётчики, тумблеры, простая валидация форм.</p>
         <p class="impact"><b>Импакт</b>Прототип с реальным поведением (не просто «клик — переход») можно тестировать на пользователях без единой строчки кода и без разработчика.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+conditional+logic+expressions+prototype+variables">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=be0qXMxn1OE" title="Канал: Nexfield Academy">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -554,12 +797,18 @@
             <input type="checkbox" class="done-check" data-id="new-grid-layout" aria-label="Отметить фичу как изученную" />
             <span class="tag">Layout</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-grid-layout" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-grid-layout" data-title="Grid-раскладки в Auto Layout" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Grid-раскладки в Auto Layout</h3>
         <p class="desc">Настоящая сетка (строки и колонки) внутри Auto Layout-контейнера — аналог CSS Grid, а не имитация через вложенные фреймы.</p>
         <p class="impact"><b>Импакт</b>Дашборды, галереи и карточные сетки собираются без десятков вложенных auto-layout фреймов «для симуляции grid».</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+grid+auto+layout+2024+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Wf_Kj1lv_3k" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -568,12 +817,17 @@
             <input type="checkbox" class="done-check" data-id="new-code-connect" aria-label="Отметить фичу как изученную" />
             <span class="tag">Dev Handoff</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-code-connect" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-code-connect" data-title="Code Connect" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Code Connect</h3>
         <p class="desc">Привязка реальных компонентов кодовой базы (React, SwiftUI и др.) к компонентам в Figma — Dev Mode показывает настоящий сниппет проекта, а не сгенерированный.</p>
         <p class="impact"><b>Импакт</b>Разработчик видит именно тот компонент, который уже есть в проекте, — меньше дублей кода и меньше расхождений между дизайн-системой и реальной библиотекой компонентов.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Code+Connect+tutorial">▶ Смотреть на YouTube</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -582,12 +836,18 @@
             <input type="checkbox" class="done-check" data-id="new-sites" aria-label="Отметить фичу как изученную" />
             <span class="tag">Publishing</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-sites" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-sites" data-title="Figma Sites" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Figma Sites</h3>
         <p class="desc">Публикация сайта прямо из дизайн-файла — с реальным поведением (адаптивность, анимации, формы), без передачи макета в отдельный конструктор или разработку.</p>
         <p class="impact"><b>Импакт</b>Лендинги, промо-страницы и маркетинговые сайты дизайнер доводит от макета до продакшена самостоятельно, минуя цикл разработки.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Sites+tutorial+2025">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KmGbVoYMNfc" title="Канал: Даниил Шишко x Pixel Perfect">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -596,12 +856,18 @@
             <input type="checkbox" class="done-check" data-id="new-make" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-make" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-make" data-title="Figma Make" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Figma Make</h3>
         <p class="desc">Генерация рабочего прототипа с реальной логикой и данными по текстовому описанию или дизайну — переход от «картинки» к кликабельному мини-приложению.</p>
         <p class="impact"><b>Импакт</b>Гипотезу можно проверить на функциональном прототипе за минуты, а не ждать спринт разработки на PoC.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Make+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=rMMOqOACF1c" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -610,12 +876,18 @@
             <input type="checkbox" class="done-check" data-id="new-buzz" aria-label="Отметить фичу как изученную" />
             <span class="tag">Content</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-buzz" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-buzz" data-title="Figma Buzz" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Figma Buzz</h3>
         <p class="desc">Инструмент для быстрой сборки брендированного маркетингового контента по шаблонам, которые задаёт дизайнер, — для соцсетей, баннеров, промо-материалов.</p>
         <p class="impact"><b>Импакт</b>Маркетинг и другие команды сами собирают контент в рамках бренд-гайда, а дизайнер один раз настраивает шаблон вместо ручного производства каждого баннера.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Buzz+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=vILyX-9KYvY" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -624,12 +896,18 @@
             <input type="checkbox" class="done-check" data-id="new-mcp-server" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI / Dev</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-mcp-server" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-mcp-server" data-title="Dev Mode MCP Server" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Dev Mode MCP Server</h3>
         <p class="desc">Сервер, через который AI-агенты (Claude Code, Cursor и другие) читают реальный design context — токены, структуру компонентов, разметку — прямо из открытого файла Figma.</p>
         <p class="impact"><b>Импакт</b>Код, сгенерированный AI, использует настоящие токены и структуру дизайна, а не угадывает их — дизайн-система становится источником правды для AI-кодогенерации.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Dev+Mode+MCP+server+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7E6552xZ9tM" title="Канал: Макс Куратов">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new">
@@ -638,12 +916,17 @@
             <input type="checkbox" class="done-check" data-id="new-code-layers" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-code-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-code-layers" data-title="Code Layers" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Code Layers</h3>
         <p class="desc">Новый тип слоя, в который можно подключить настоящий репозиторий (клонировать GitHub или загрузить локальный код) и переключаться между кодом и дизайном как между двумя представлениями одного и того же экрана.</p>
         <p class="impact"><b>Импакт</b>Хэндофф перестаёт быть передачей «картинки» разработчику — дизайнер работает с реальными состояниями и структурой компонентов внутри самого файла, а не с их имитацией.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Code+Layers+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -652,12 +935,18 @@
             <input type="checkbox" class="done-check" data-id="new-figma-motion" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-figma-motion" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-figma-motion" data-title="Figma Motion" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Figma Motion</h3>
         <p class="desc">Полноценный таймлайн анимации внутри файла — кейфреймы, кривые изинга, spring-анимации; агент может сгенерировать первый черновик анимации по текстовому запросу.</p>
         <p class="impact"><b>Импакт</b>Моушен-дизайн переезжает из отдельных инструментов прямо в Figma и экспортируется готовым к продакшену кодом — дизайнер настраивает не механику, а смысл движения.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Motion+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=T57pv7sJXuY" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -666,12 +955,18 @@
             <input type="checkbox" class="done-check" data-id="new-shader-effects" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-shader-effects" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-shader-effects" data-title="AI-шейдеры и эффекты" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>AI-шейдеры и эффекты</h3>
         <p class="desc">Кастомные визуальные эффекты и заливки на базе WebGPU, которые генерируются промптом агенту, а затем переиспользуются как обычный стиль в других файлах.</p>
         <p class="impact"><b>Импакт</b>Сложные визуальные эффекты для лендингов и промо больше не требуют навыков шейдер-программирования — но решение, где эффект уместен и не превращается в визуальный шум, всё равно на дизайнере.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+shader+effects+Config+2026">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=BE6lSuNwzN0" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -680,12 +975,18 @@
             <input type="checkbox" class="done-check" data-id="new-weave" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-weave" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-weave" data-title="Weave на канвасе" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Weave на канвасе</h3>
         <p class="desc">Замена фона, композитинг логотипов, смена соотношения сторон и генерация изображений — раньше отдельные инструменты, теперь встроены прямо в канвас с готовой AI-логикой промптинга.</p>
         <p class="impact"><b>Импакт</b>Рутинная работа с изображениями (вырезать фон, подогнать формат под баннер) занимает секунды прямо в файле — время освобождается для оценки результата, а не производства.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Weave+canvas+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=YzymaYJmiLM" title="Канал: Говорит Дизайнер">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -694,12 +995,18 @@
             <input type="checkbox" class="done-check" data-id="new-generative-plugins" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-generative-plugins" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-generative-plugins" data-title="Генеративные плагины" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Генеративные плагины</h3>
         <p class="desc">Дизайнер описывает словами рутинную операцию (пересортировать слои, привести отступы к сетке, найти и заменить цвет) — агент собирает из этого переиспользуемый плагин без единой строчки кода.</p>
         <p class="impact"><b>Импакт</b>Командные конвенции соблюдаются автоматически — «стандарт следит сам за собой», а дизайнер тратит внимание на исключения, где действительно нужна оценка человека.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+generative+plugins+Config+2026">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=IsJ1i89Ij1E" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -708,12 +1015,18 @@
             <input type="checkbox" class="done-check" data-id="new-figma-agent" aria-label="Отметить фичу как изученную" />
             <span class="tag">Config 2026</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-figma-agent" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-figma-agent" data-title="Расширенный Figma Agent" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Расширенный Figma Agent</h3>
         <p class="desc">Агент получил кастомные переиспользуемые «навыки» из рабочих процессов команды, подключение внешних сервисов через MCP (Notion, GitHub, Excel), веб-поиск и живые данные, а также вышел за пределы дизайн-файлов — в FigJam и Figma Slides.</p>
         <p class="impact"><b>Импакт</b>Решения команды и её процессы превращаются в исполняемый навык, а не остаются в чьей-то голове или личной переписке — агент одинаково полезен на этапе брейншторма, дизайна и презентации результата.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Agent+Config+2026+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SYoZ4bN6C8U" title="Канал: Alexey Bychkov: нейро-uxui-дизайн">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -722,12 +1035,18 @@
             <input type="checkbox" class="done-check" data-id="new-first-draft" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-first-draft" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-first-draft" data-title="First Draft" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>First Draft</h3>
         <p class="desc">Текстовый промпт превращается в полностью редактируемый макет за минуты — слои, компоненты и структура, а не картинка.</p>
         <p class="impact"><b>Импакт</b>Первая версия экрана для обсуждения появляется за минуты, а не за день, — черновик для дискуссии с командой, а не финальный дизайн.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+First+Draft+AI+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=xmsr_gU5FCA" title="Канал: Study Kvo">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -736,12 +1055,18 @@
             <input type="checkbox" class="done-check" data-id="new-rename-layers" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-rename-layers" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-rename-layers" data-title="AI-переименование слоёв" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>AI-переименование слоёв</h3>
         <p class="desc">AI смотрит на содержимое слоя, его окружение и связь с соседними слоями и предлагает осмысленное имя — «hero-section», «nav-link», «product-card-title» — вместо «Frame 482».</p>
         <p class="impact"><b>Импакт</b>Файл остаётся читаемым для команды и для Dev Mode без ручной дисциплины по нейминегу — особенно ценно на больших файлах и в передаче между дизайнерами.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+AI+rename+layers+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cdwoLLwblnk" title="Канал: Сообщество душнил">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
       <article class="card new" data-ai="true">
@@ -750,14 +1075,21 @@
             <input type="checkbox" class="done-check" data-id="new-visual-search" aria-label="Отметить фичу как изученную" />
             <span class="tag">AI</span>
           </div>
+          <div class="card-top-right">
           <button class="fav-btn" data-id="new-visual-search" aria-label="Добавить в закладки" title="Добавить в закладки"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg></button>
+          <button class="note-btn" data-id="new-visual-search" data-title="Visual Search" aria-label="Заметки и ссылки" title="Мои заметки и ссылки"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 3h13l3 3v15H4V3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          </div>
         </div>
         <h3>Visual Search</h3>
         <p class="desc">Загружаете изображение — Figma находит похожие или совпадающие элементы в файлах и библиотеках команды по визуальному сходству, а не по названию слоя.</p>
         <p class="impact"><b>Импакт</b>Поиск нужной иконки, иллюстрации или готового паттерна занимает секунды — не нужно помнить, как что называется в библиотеке.</p>
+        <div class="card-actions">
         <a class="yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Figma+Visual+Search+AI+tutorial">▶ Смотреть на YouTube</a>
+          <a class="yt yt-ru" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byrx2Reng6I" title="Канал: Evgen Marfel">🇷🇺 Разбор на русском</a>
+        </div>
       </article>
 
+    </div>
     </div>
   </section>
 
@@ -768,6 +1100,23 @@
     Собрано вручную, ссылки ведут на поиск YouTube — так они не протухают и всегда ведут на актуальные видео. Прогресс хранится локально в браузере (localStorage), только на этом устройстве.
   </div>
 </footer>
+
+<div class="notes-backdrop" id="notes-backdrop"></div>
+<div class="notes-sheet" id="notes-sheet" role="dialog" aria-modal="true" aria-labelledby="notes-sheet-title">
+  <div class="notes-sheet-header">
+    <div>
+      <h4 id="notes-sheet-title">Мои заметки</h4>
+      <p class="sub" id="notes-sheet-sub">Фича</p>
+    </div>
+    <button class="notes-close" id="notes-close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="notes-list" id="notes-list"></div>
+  <form class="notes-form" id="notes-form">
+    <input type="text" id="notes-input" placeholder="Вставьте ссылку или напишите заметку" autocomplete="off" />
+    <button type="submit">Добавить</button>
+  </form>
+  <p class="notes-hint">Хранится локально в этом браузере.</p>
+</div>
 
 <script>
   var buttons = document.querySelectorAll('nav.filters .row button[data-filter]');
@@ -907,5 +1256,119 @@
     updateProgress();
     progressTrigger.classList.remove('open');
     progressDropdown.classList.remove('open');
+  });
+
+  var NOTES_KEY = 'figma-guide-notes';
+  var notesBackdrop = document.getElementById('notes-backdrop');
+  var notesSheet = document.getElementById('notes-sheet');
+  var notesList = document.getElementById('notes-list');
+  var notesForm = document.getElementById('notes-form');
+  var notesInput = document.getElementById('notes-input');
+  var notesSubEl = document.getElementById('notes-sheet-sub');
+  var notesCloseBtn = document.getElementById('notes-close');
+  var currentNotesId = null;
+
+  function loadNotes() {
+    try {
+      return JSON.parse(localStorage.getItem(NOTES_KEY)) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+  function saveNotes(state) {
+    localStorage.setItem(NOTES_KEY, JSON.stringify(state));
+  }
+  function refreshNoteBtnState(id) {
+    var state = loadNotes();
+    var count = (state[id] || []).length;
+    document.querySelectorAll('.note-btn[data-id="' + id + '"]').forEach(function (b) {
+      b.classList.toggle('has-notes', count > 0);
+    });
+  }
+  function renderNotesList() {
+    var state = loadNotes();
+    var items = state[currentNotesId] || [];
+    notesList.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('p');
+      empty.className = 'notes-empty';
+      empty.textContent = 'Пока пусто — добавьте первую ссылку или заметку.';
+      notesList.appendChild(empty);
+      return;
+    }
+    items.forEach(function (item, idx) {
+      var row = document.createElement('div');
+      row.className = 'notes-item';
+      var isUrl = /^https?:\/\//i.test(item.text);
+      var el;
+      if (isUrl) {
+        el = document.createElement('a');
+        el.href = item.text;
+        el.target = '_blank';
+        el.rel = 'noopener';
+      } else {
+        el = document.createElement('span');
+        el.style.flex = '1';
+        el.style.minWidth = '0';
+        el.style.fontSize = '14px';
+        el.style.overflow = 'hidden';
+        el.style.textOverflow = 'ellipsis';
+        el.style.whiteSpace = 'nowrap';
+      }
+      el.textContent = item.text;
+      row.appendChild(el);
+      var del = document.createElement('button');
+      del.className = 'notes-item-delete';
+      del.setAttribute('aria-label', 'Удалить');
+      del.textContent = '✕';
+      del.addEventListener('click', function () {
+        var s = loadNotes();
+        (s[currentNotesId] || []).splice(idx, 1);
+        saveNotes(s);
+        renderNotesList();
+        refreshNoteBtnState(currentNotesId);
+      });
+      row.appendChild(del);
+      notesList.appendChild(row);
+    });
+  }
+  function openNotesSheet(id, title) {
+    currentNotesId = id;
+    notesSubEl.textContent = title;
+    renderNotesList();
+    notesBackdrop.classList.add('open');
+    notesSheet.classList.add('open');
+    notesInput.value = '';
+    notesInput.focus();
+  }
+  function closeNotesSheet() {
+    notesBackdrop.classList.remove('open');
+    notesSheet.classList.remove('open');
+    currentNotesId = null;
+  }
+  document.querySelectorAll('.note-btn').forEach(function (btn) {
+    var id = btn.getAttribute('data-id');
+    refreshNoteBtnState(id);
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openNotesSheet(id, btn.getAttribute('data-title'));
+    });
+  });
+  notesCloseBtn.addEventListener('click', closeNotesSheet);
+  notesBackdrop.addEventListener('click', closeNotesSheet);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeNotesSheet();
+  });
+  notesForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var val = notesInput.value.trim();
+    if (!val || !currentNotesId) return;
+    var s = loadNotes();
+    if (!s[currentNotesId]) s[currentNotesId] = [];
+    s[currentNotesId].push({ text: val });
+    saveNotes(s);
+    notesInput.value = '';
+    renderNotesList();
+    refreshNoteBtnState(currentNotesId);
   });
 </script>
