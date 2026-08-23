@@ -486,26 +486,27 @@
   .notes-backdrop.open { opacity: 1; pointer-events: auto; }
   .notes-sheet {
     position: fixed;
-    left: 0;
+    top: 0;
     right: 0;
     bottom: 0;
+    width: 100%;
     max-width: 640px;
-    margin: 0 auto;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-bottom: none;
-    border-radius: 20px 20px 0 0;
+    border-right: none;
+    border-radius: 20px 0 0 20px;
     box-shadow: var(--shadow);
     padding: 20px 20px 100px;
-    max-height: 75vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     gap: 14px;
-    transform: translateY(100%);
+    overflow-y: auto;
+    transform: translateX(100%);
     transition: transform .25s ease;
     z-index: 41;
   }
-  .notes-sheet.open { transform: translateY(0); }
+  .notes-sheet.open { transform: translateX(0); }
   .notes-sheet-header {
     display: flex;
     align-items: flex-start;
