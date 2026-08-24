@@ -1474,11 +1474,30 @@
       g.style.display = groupVisible ? '' : 'none';
     });
   }
+  function scrollToFilterTarget(filter) {
+    var target = null;
+    if (filter === 'core' || filter === 'new' || filter === 'ai') {
+      target = document.querySelector('section.group[data-group="' + filter + '"] h2');
+    } else {
+      for (var i = 0; i < groups.length; i++) {
+        if (groups[i].style.display !== 'none') {
+          target = groups[i].querySelector('h2');
+          break;
+        }
+      }
+    }
+    if (!target) return;
+    var navHeight = navFilters.getBoundingClientRect().height;
+    var top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+    window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+  }
   buttons.forEach(function (btn) {
     btn.addEventListener('click', function () {
       buttons.forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      applyFilter(btn.getAttribute('data-filter'));
+      var filter = btn.getAttribute('data-filter');
+      applyFilter(filter);
+      scrollToFilterTarget(filter);
     });
   });
 
