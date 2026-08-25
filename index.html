@@ -446,6 +446,22 @@
     .video-banner-body { padding: 20px; }
   }
 
+  body.notes-mode .video-banner { display: none; }
+  body.notes-mode section.group h2,
+  body.notes-mode section.group .subtitle,
+  body.notes-mode .section-complete-banner {
+    display: none;
+  }
+  body.notes-mode section.group {
+    padding: 0;
+  }
+  body.notes-mode section.group.all-done .grid-panel {
+    display: block;
+  }
+  body.notes-mode .grid {
+    margin-bottom: 20px;
+  }
+
   section.group { padding: 56px 0 16px; }
   section.group h2 {
     font-size: 26px;
@@ -1540,13 +1556,15 @@
     });
   }
   function scrollToFilterTarget(filter) {
+    var notesMode = document.body.classList.contains('notes-mode');
     var target = null;
     if (filter === 'core' || filter === 'new' || filter === 'ai') {
-      target = document.querySelector('section.group[data-group="' + filter + '"] h2');
+      var section = document.querySelector('section.group[data-group="' + filter + '"]');
+      target = notesMode ? section : section && section.querySelector('h2');
     } else {
       for (var i = 0; i < groups.length; i++) {
         if (groups[i].style.display !== 'none') {
-          target = groups[i].querySelector('h2');
+          target = notesMode ? groups[i] : groups[i].querySelector('h2');
           break;
         }
       }
