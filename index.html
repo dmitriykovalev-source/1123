@@ -462,26 +462,21 @@
   }
 
   body.notes-mode .video-banner { display: none; }
-  body.notes-mode section.group h2,
-  body.notes-mode section.group .subtitle,
-  body.notes-mode .section-complete-banner {
+  body.notes-mode section.group {
     display: none;
   }
-  body.notes-mode section.group {
-    padding: 0;
+  #notes-flat-grid {
+    display: none;
   }
-  body.notes-mode section.group.all-done .grid-panel {
-    display: block;
-  }
-  body.notes-mode .grid {
-    margin-bottom: 20px;
+  body.notes-mode #notes-flat-grid {
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
   @media (max-width: 900px) {
-    body.notes-mode .grid { grid-template-columns: repeat(2, 1fr); }
+    body.notes-mode #notes-flat-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
-    body.notes-mode .grid { grid-template-columns: 1fr; }
+    body.notes-mode #notes-flat-grid { grid-template-columns: 1fr; }
   }
   body.notes-mode .content-wrap {
     margin-top: 40px;
@@ -975,6 +970,8 @@
       </span>
     </span>
   </a>
+
+  <div class="grid notes-flat-grid" id="notes-flat-grid"></div>
 
   <section class="group" data-group="core">
     <h2>Важные фичи</h2>
@@ -1876,7 +1873,7 @@
         renderNotesList();
         refreshNoteBtnState(currentNotesId);
         renderInlineNotesFor(currentNotesId);
-        applyFilter(currentFilter);
+        if (document.body.classList.contains('notes-mode')) { applyFlatNotesFilter(); } else { applyFilter(currentFilter); }
       });
       top.appendChild(del);
       row.appendChild(top);
@@ -1949,6 +1946,31 @@
   }
   var NOTES_MODE_KEY = 'figma-guide-notes-mode';
   var notesModeToggle = document.getElementById('notes-mode-toggle');
+  var flatGridOriginalSlots = [];
+  function enterNotesFlatLayout() {
+    var flatGrid = document.getElementById('notes-flat-grid');
+    if (!flatGrid || flatGrid.dataset.flattened === '1') return;
+    flatGridOriginalSlots = [];
+    document.querySelectorAll('section.group .card').forEach(function (card) {
+      flatGridOriginalSlots.push({ card: card, parent: card.parentNode, nextSibling: card.nextSibling });
+      flatGrid.appendChild(card);
+    });
+    flatGrid.dataset.flattened = '1';
+  }
+  function exitNotesFlatLayout() {
+    var flatGrid = document.getElementById('notes-flat-grid');
+    if (!flatGrid || flatGrid.dataset.flattened !== '1') return;
+    flatGridOriginalSlots.forEach(function (slot) {
+      slot.parent.insertBefore(slot.card, slot.nextSibling);
+    });
+    flatGridOriginalSlots = [];
+    flatGrid.dataset.flattened = '0';
+  }
+  function applyFlatNotesFilter() {
+    document.querySelectorAll('#notes-flat-grid .card').forEach(function (card) {
+      card.style.display = cardHasNotes(card) ? '' : 'none';
+    });
+  }
   function applyNotesMode(enabled) {
     document.body.classList.toggle('notes-mode', enabled);
     if (enabled) {
@@ -1957,8 +1979,12 @@
       if (allBtn) allBtn.classList.add('active');
       currentFilter = 'all';
       renderAllInlineNotes();
+      enterNotesFlatLayout();
+      applyFlatNotesFilter();
+    } else {
+      exitNotesFlatLayout();
+      applyFilter(currentFilter);
     }
-    applyFilter(currentFilter);
   }
   document.querySelectorAll('.note-btn').forEach(function (btn) {
     var id = btn.getAttribute('data-id');
@@ -2003,7 +2029,7 @@
     renderNotesList();
     refreshNoteBtnState(currentNotesId);
     renderInlineNotesFor(currentNotesId);
-    applyFilter(currentFilter);
+    if (document.body.classList.contains('notes-mode')) { applyFlatNotesFilter(); } else { applyFilter(currentFilter); }
   });
 
   function buildTitleMap() {
