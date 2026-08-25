@@ -267,10 +267,25 @@
     background: rgba(255,255,255,.25);
     color: #fff;
   }
+  nav.filters .row button.tab-done {
+    order: 5;
+    opacity: .5;
+    border-style: dashed;
+    color: var(--text-dim);
+  }
+  nav.filters .row button.tab-done.active {
+    opacity: 1;
+  }
+  body.notes-mode nav.filters .row button[data-filter] {
+    opacity: .45;
+    pointer-events: none;
+    cursor: default;
+  }
   .mode-switch {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    order: 20;
     margin-left: auto;
     font-size: 13px;
     color: var(--text-dim);
@@ -460,6 +475,12 @@
   }
   body.notes-mode .grid {
     margin-bottom: 20px;
+  }
+  body.notes-mode .content-wrap {
+    margin-top: 40px;
+  }
+  body.notes-mode .done-check {
+    display: none;
   }
 
   section.group { padding: 56px 0 16px; }
@@ -926,7 +947,7 @@
  </div>
 </nav>
 
-<div class="wrap">
+<div class="wrap content-wrap">
 
   <a class="video-banner" href="https://www.youtube.com/watch?v=2ZCc4k_IV5w" target="_blank" rel="noopener">
     <span class="video-banner-media">
@@ -1690,6 +1711,8 @@
       var allDone = boxes.length > 0 && Array.prototype.every.call(boxes, function (cb) { return cb.checked; });
       if (!allDone) g.classList.remove('force-open');
       g.classList.toggle('all-done', allDone);
+      var tabBtn = document.querySelector('nav.filters .row button[data-filter="' + g.getAttribute('data-group') + '"]');
+      if (tabBtn) tabBtn.classList.toggle('tab-done', allDone);
     });
   }
   document.querySelectorAll('.section-toggle').forEach(function (btn) {
@@ -1918,7 +1941,13 @@
   var notesModeToggle = document.getElementById('notes-mode-toggle');
   function applyNotesMode(enabled) {
     document.body.classList.toggle('notes-mode', enabled);
-    if (enabled) renderAllInlineNotes();
+    if (enabled) {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      var allBtn = document.querySelector('nav.filters .row button[data-filter="all"]');
+      if (allBtn) allBtn.classList.add('active');
+      currentFilter = 'all';
+      renderAllInlineNotes();
+    }
     applyFilter(currentFilter);
   }
   document.querySelectorAll('.note-btn').forEach(function (btn) {
