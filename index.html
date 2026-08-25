@@ -277,6 +277,91 @@
     background: rgba(255,255,255,.25);
     color: #fff;
   }
+  .mode-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+    user-select: none;
+  }
+  .mode-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .mode-switch .track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background .15s ease;
+  }
+  .mode-switch .track::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.25);
+    transition: transform .15s ease;
+  }
+  .mode-switch input:checked + .track {
+    background: var(--accent);
+  }
+  .mode-switch input:checked + .track::after {
+    transform: translateX(16px);
+  }
+  .mode-switch input:focus-visible + .track {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .card-notes-inline {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  body.notes-mode .card-notes-inline {
+    display: flex;
+  }
+  body.notes-mode .card .desc,
+  body.notes-mode .card .impact {
+    display: none;
+  }
+  .note-inline-empty {
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .note-inline-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+  }
+  .note-inline-item a {
+    color: var(--accent);
+    font-size: 14px;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .note-inline-item a:hover { text-decoration: underline; }
+  .note-inline-item p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+  }
 
   .video-banner {
     display: flex;
@@ -824,6 +909,11 @@
       <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg>
       Избранное <span class="fav-count" id="fav-count">0</span>
     </button>
+    <label class="mode-switch">
+      <input type="checkbox" id="notes-mode-toggle" />
+      <span class="track"></span>
+      Режим заметок
+    </label>
   </div>
  </div>
 </nav>
@@ -1741,6 +1831,7 @@
         saveNotes(s);
         renderNotesList();
         refreshNoteBtnState(currentNotesId);
+        renderInlineNotesFor(currentNotesId);
       });
       top.appendChild(del);
       row.appendChild(top);
@@ -1770,13 +1861,70 @@
     notesSheet.classList.remove('open');
     currentNotesId = null;
   }
+  function renderInlineNotesFor(id) {
+    var container = document.querySelector('.card-notes-inline[data-id="' + id + '"]');
+    if (!container) return;
+    var items = loadNotes()[id] || [];
+    container.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('p');
+      empty.className = 'note-inline-empty';
+      empty.textContent = 'Пока нет заметок для этой фичи.';
+      container.appendChild(empty);
+      return;
+    }
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'note-inline-item';
+      var url = item.url || item.text || '';
+      var link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = url;
+      row.appendChild(link);
+      if (item.comment) {
+        var comment = document.createElement('p');
+        comment.textContent = item.comment;
+        row.appendChild(comment);
+      }
+      container.appendChild(row);
+    });
+  }
+  function renderAllInlineNotes() {
+    document.querySelectorAll('.card-notes-inline').forEach(function (container) {
+      renderInlineNotesFor(container.getAttribute('data-id'));
+    });
+  }
+  var NOTES_MODE_KEY = 'figma-guide-notes-mode';
+  var notesModeToggle = document.getElementById('notes-mode-toggle');
+  function applyNotesMode(enabled) {
+    document.body.classList.toggle('notes-mode', enabled);
+    if (enabled) renderAllInlineNotes();
+  }
   document.querySelectorAll('.note-btn').forEach(function (btn) {
     var id = btn.getAttribute('data-id');
     refreshNoteBtnState(id);
+    var card = btn.closest('.card');
+    if (card && !card.querySelector('.card-notes-inline')) {
+      var inline = document.createElement('div');
+      inline.className = 'card-notes-inline';
+      inline.setAttribute('data-id', id);
+      var actions = card.querySelector('.card-actions');
+      card.insertBefore(inline, actions);
+    }
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       openNotesSheet(id, btn.getAttribute('data-title'));
     });
+  });
+  var storedNotesMode = false;
+  try { storedNotesMode = localStorage.getItem(NOTES_MODE_KEY) === '1'; } catch (e) {}
+  notesModeToggle.checked = storedNotesMode;
+  applyNotesMode(storedNotesMode);
+  notesModeToggle.addEventListener('change', function () {
+    applyNotesMode(notesModeToggle.checked);
+    try { localStorage.setItem(NOTES_MODE_KEY, notesModeToggle.checked ? '1' : '0'); } catch (e) {}
   });
   notesCloseBtn.addEventListener('click', closeNotesSheet);
   notesBackdrop.addEventListener('click', closeNotesSheet);
@@ -1796,6 +1944,7 @@
     notesCommentInput.value = '';
     renderNotesList();
     refreshNoteBtnState(currentNotesId);
+    renderInlineNotesFor(currentNotesId);
   });
 
   function buildTitleMap() {
