@@ -65,7 +65,6 @@
     box-shadow: 0 8px 16px -10px rgba(0,0,0,0.25);
   }
   nav.filters .progress {
-    max-width: 520px;
     margin: 0 0 26px;
   }
   nav.filters .progress .label {
@@ -241,15 +240,6 @@
     background: var(--accent);
     border-color: var(--accent);
     color: #fff;
-  }
-  nav.filters .row button.tab-done {
-    order: 10;
-    opacity: .5;
-    border-style: dashed;
-    color: var(--text-dim);
-  }
-  nav.filters .row button.tab-done.active {
-    opacity: 1;
   }
   .tab-favorites {
     display: inline-flex;
@@ -521,6 +511,7 @@
     opacity: .5;
   }
   .card.done:hover { opacity: 1; }
+  body.notes-mode .card.done { opacity: 1; }
   .card-top {
     display: flex;
     align-items: center;
@@ -912,7 +903,7 @@
     <label class="mode-switch">
       <input type="checkbox" id="notes-mode-toggle" />
       <span class="track"></span>
-      Режим заметок
+      Заметки
     </label>
   </div>
  </div>
@@ -1677,8 +1668,6 @@
       var allDone = boxes.length > 0 && Array.prototype.every.call(boxes, function (cb) { return cb.checked; });
       if (!allDone) g.classList.remove('force-open');
       g.classList.toggle('all-done', allDone);
-      var tabBtn = document.querySelector('nav.filters .row button[data-filter="' + g.getAttribute('data-group') + '"]');
-      if (tabBtn) tabBtn.classList.toggle('tab-done', allDone);
     });
   }
   document.querySelectorAll('.section-toggle').forEach(function (btn) {
@@ -1869,7 +1858,7 @@
     if (!items.length) {
       var empty = document.createElement('p');
       empty.className = 'note-inline-empty';
-      empty.textContent = 'Пока нет заметок для этой фичи.';
+      empty.textContent = 'Заметок нет.';
       container.appendChild(empty);
       return;
     }
