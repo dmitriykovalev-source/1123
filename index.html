@@ -475,11 +475,21 @@
   }
   body.notes-mode .grid {
     margin-bottom: 20px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 900px) {
+    body.notes-mode .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    body.notes-mode .grid { grid-template-columns: 1fr; }
   }
   body.notes-mode .content-wrap {
     margin-top: 40px;
   }
   body.notes-mode .done-check {
+    display: none;
+  }
+  body.notes-mode .card-actions {
     display: none;
   }
 
