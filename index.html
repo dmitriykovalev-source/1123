@@ -509,6 +509,7 @@
     background: var(--bg-card);
     border-color: var(--border);
     opacity: .5;
+    order: 1;
   }
   .card.done:hover { opacity: 1; }
   body.notes-mode .card.done { opacity: 1; }
@@ -1529,6 +1530,9 @@
         else if (filter === 'ai') show = card.getAttribute('data-ai') === 'true';
         else if (filter === 'favorites') show = card.querySelector('.fav-btn').classList.contains('is-fav');
         else show = groupName === filter;
+        if (show && document.body.classList.contains('notes-mode') && !cardHasNotes(card)) {
+          show = false;
+        }
         card.style.display = show ? '' : 'none';
         if (show) groupVisible = true;
       });
@@ -1821,6 +1825,7 @@
         renderNotesList();
         refreshNoteBtnState(currentNotesId);
         renderInlineNotesFor(currentNotesId);
+        applyFilter(currentFilter);
       });
       top.appendChild(del);
       row.appendChild(top);
@@ -1885,11 +1890,18 @@
       renderInlineNotesFor(container.getAttribute('data-id'));
     });
   }
+  function cardHasNotes(card) {
+    var noteBtn = card.querySelector('.note-btn');
+    var id = noteBtn && noteBtn.getAttribute('data-id');
+    if (!id) return false;
+    return (loadNotes()[id] || []).length > 0;
+  }
   var NOTES_MODE_KEY = 'figma-guide-notes-mode';
   var notesModeToggle = document.getElementById('notes-mode-toggle');
   function applyNotesMode(enabled) {
     document.body.classList.toggle('notes-mode', enabled);
     if (enabled) renderAllInlineNotes();
+    applyFilter(currentFilter);
   }
   document.querySelectorAll('.note-btn').forEach(function (btn) {
     var id = btn.getAttribute('data-id');
@@ -1934,6 +1946,7 @@
     renderNotesList();
     refreshNoteBtnState(currentNotesId);
     renderInlineNotesFor(currentNotesId);
+    applyFilter(currentFilter);
   });
 
   function buildTitleMap() {
