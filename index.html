@@ -329,6 +329,18 @@
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+  .mode-switches {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    order: 20;
+    margin-left: auto;
+  }
+  .mode-switches .mode-switch {
+    order: 0;
+    margin-left: 0;
+  }
   .card-notes-inline {
     display: none;
     flex-direction: column;
@@ -943,11 +955,18 @@
       <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 3.5C6 2.67 6.67 2 7.5 2h9c.83 0 1.5.67 1.5 1.5V21l-6-3.6L6 21V3.5z"/></svg>
       Избранное <span class="fav-count" id="fav-count">0</span>
     </button>
-    <label class="mode-switch">
-      <input type="checkbox" id="notes-mode-toggle" />
-      <span class="track"></span>
-      Заметки
-    </label>
+    <div class="mode-switches">
+      <label class="mode-switch">
+        <input type="checkbox" id="notes-mode-toggle" />
+        <span class="track"></span>
+        Заметки
+      </label>
+      <label class="mode-switch">
+        <input type="checkbox" id="hide-done-toggle" />
+        <span class="track"></span>
+        Скрыть завершённые
+      </label>
+    </div>
   </div>
  </div>
 </nav>
@@ -1562,6 +1581,20 @@
   var buttons = document.querySelectorAll('nav.filters .row button[data-filter]');
   var groups = document.querySelectorAll('section.group');
   var currentFilter = 'all';
+
+  var HIDE_DONE_KEY = 'figma-guide-hide-done';
+  var hideDoneToggle = document.getElementById('hide-done-toggle');
+  var hideDone = false;
+  try { hideDone = localStorage.getItem(HIDE_DONE_KEY) === '1'; } catch (e) {}
+  function isCardDone(card) {
+    var cb = card.querySelector('.done-check');
+    return !!(cb && cb.checked);
+  }
+  function applyHideDone() {
+    if (document.body.classList.contains('notes-mode')) applyFlatNotesFilter();
+    else applyFilter(currentFilter);
+  }
+
   function applyFilter(filter) {
     currentFilter = filter;
     groups.forEach(function (g) {
@@ -1575,6 +1608,9 @@
         else if (filter === 'favorites') show = card.querySelector('.fav-btn').classList.contains('is-fav');
         else show = groupName === filter;
         if (show && document.body.classList.contains('notes-mode') && !cardHasNotes(card)) {
+          show = false;
+        }
+        if (show && hideDone && isCardDone(card)) {
           show = false;
         }
         card.style.display = show ? '' : 'none';
@@ -1750,6 +1786,7 @@
       updateProgress();
       updateSectionCollapse();
       updateProgressHint();
+      if (hideDone) applyHideDone();
     });
   });
 
@@ -1968,7 +2005,7 @@
   }
   function applyFlatNotesFilter() {
     document.querySelectorAll('#notes-flat-grid .card').forEach(function (card) {
-      card.style.display = cardHasNotes(card) ? '' : 'none';
+      card.style.display = (cardHasNotes(card) && !(hideDone && isCardDone(card))) ? '' : 'none';
     });
   }
   function applyNotesMode(enabled) {
@@ -2009,6 +2046,12 @@
   notesModeToggle.addEventListener('change', function () {
     applyNotesMode(notesModeToggle.checked);
     try { localStorage.setItem(NOTES_MODE_KEY, notesModeToggle.checked ? '1' : '0'); } catch (e) {}
+  });
+  hideDoneToggle.checked = hideDone;
+  hideDoneToggle.addEventListener('change', function () {
+    hideDone = hideDoneToggle.checked;
+    try { localStorage.setItem(HIDE_DONE_KEY, hideDone ? '1' : '0'); } catch (e) {}
+    applyHideDone();
   });
   notesCloseBtn.addEventListener('click', closeNotesSheet);
   notesBackdrop.addEventListener('click', closeNotesSheet);
